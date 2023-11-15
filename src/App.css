@@ -5,66 +5,76 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.app-container {
+  display: flex;
+  width: 100vh;
+  justify-content: center;
+  align-items: flex-start; /* Align to the top */
+  height: 120vh;
+  padding-top: 20px; /* Add some space at the top */
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-
-/* App.css */
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  padding: 10%; /* This adds space around the grid, adjust as needed */
+  width: 66.66%; /* Two-thirds of the container */
+  height: auto; /* Adjust based on content */
+  position: relative;
   background-image: url('/field.png');
-  background-size: cover; /* This makes sure the image covers the entire grid */
-  position: relative; /* Needed for absolute positioning of the grid slots */
+  background-size: cover;
+  background-position: center; /* Center the background image */
 }
 
-/* Adjust the GridSlot style to make it transparent so the field shows */
-.grid-slot {
-  width: 100px;
-  height: 100px;
+.overview-container {
+  width: 33.33%; /* One-third of the container */
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute; /* Positioned absolutely to sit on top of the background */
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto; /* In case of many players, allow scrolling */
+  height: calc(100vh - 40px); /* Full height minus padding */
 }
+
+.grid-slot {
+  width: 100%; /* Full width of the column */
+  height: 120px; /* Adjust to your preference */
+  margin-bottom: 10px; /* Space between slots */
+}
+
 
 /* Additional styles for the grid slots to correctly position them */
 /* You'll need to adjust the top and left values based on your layout */
 .grid-slot:nth-child(1) { top: 10%; left: 10%; }
 /* Add similar rules for each child with appropriate top and left values */
+
+/* App.css */
+
+.player {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+  font-size: 0.8em;
+}
+
+.player-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.player-stats {
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+}
+
+.player-name {
+  font-weight: bold;
+}
+
+.player-score {
+  font-size: 0.8em;
+}
