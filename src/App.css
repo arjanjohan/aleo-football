@@ -47,7 +47,7 @@
 }
 
 .grid-slot.disabled {
-  background-color: rgba(0, 0, 0, 0.1); /* Slightly dark to indicate disabled state */
+  /* background-color: rgba(0, 0, 0, 0.1); Slightly dark to indicate disabled state */
   pointer-events: none; /* Disable interactions */
 }
 

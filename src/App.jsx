@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { csv } from 'd3';
+import Navbar from './Navbar';
 import './App.css';
 
 // Player.jsx
@@ -94,11 +96,17 @@ const App = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
+      <Router></Router>
+      <Navbar />
       <div className="app-container">
         <div className="grid-container">
-          {grid.map((player, index) => (
-            <GridSlot key={index} slot={index} player={player} movePlayer={movePlayer} />
-          ))}
+          {grid.map((player, index) => {
+            // Determine if the current slot should be disabled
+            const isDisabled = index === 0 || index === 8; // Disables the top left and bottom left slots in a 3x4 grid
+            return (
+              <GridSlot key={index} slot={index} player={player} movePlayer={movePlayer} isDisabled={isDisabled} />
+            );
+          })}
         </div>
         <div className="overview-container">
           {players.map((player) => (
@@ -108,6 +116,7 @@ const App = () => {
       </div>
     </DndProvider>
   );
+
 };
 
 export default App;
