@@ -30,22 +30,22 @@ const Player = ({ player, movePlayer }) => {
 };
 
 // GridSlot component
-const GridSlot = ({ slot, player, movePlayer }) => {
-  const [, drop] = useDrop(() => ({
+const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
+  const [{ isOver }, drop] = useDrop(() => ({
     accept: 'player',
+    canDrop: () => !isDisabled,
     drop: () => ({ slot }),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
+    collect: monitor => ({
+      isOver: !!monitor.isOver()
     }),
-  }));
+  }), [isDisabled]);
 
   return (
-    <div ref={drop} className="grid-slot">
-      {player && <Player player={player} movePlayer={movePlayer} />}
+    <div ref={drop} className={`grid-slot ${isDisabled ? 'disabled' : ''}`}>
+      {player && !isDisabled && <Player player={player} movePlayer={movePlayer} />}
     </div>
   );
 };
-
 
 // Assume you have a function to fetch the CSV data
 const fetchCSV = async () => {

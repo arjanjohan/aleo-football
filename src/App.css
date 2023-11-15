@@ -37,11 +37,19 @@
 }
 
 .grid-slot {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
   width: 100%; /* Full width of the column */
   height: 120px; /* Adjust to your preference */
   margin-bottom: 10px; /* Space between slots */
+  position: relative;
 }
 
+.grid-slot.disabled {
+  background-color: rgba(0, 0, 0, 0.1); /* Slightly dark to indicate disabled state */
+  pointer-events: none; /* Disable interactions */
+}
 
 /* Additional styles for the grid slots to correctly position them */
 /* You'll need to adjust the top and left values based on your layout */
