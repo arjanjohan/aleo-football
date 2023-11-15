@@ -47,7 +47,19 @@ const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
   );
 };
 
-// Assume you have a function to fetch the CSV data
+const SelectTeam = ({ onTeamSelected }) => {
+  return (
+    <div className="select-team-container">
+      {['A', 'B', 'C'].map((team) => (
+        <button key={team} className="team-option" onClick={() => onTeamSelected(team)}>
+          <img src={`/images/player_${team.toLowerCase()}.png`} alt={team} className="team-image" />
+          <div className="team-name">{team}</div>
+        </button>
+      ))}
+    </div>
+  );
+};
+
 const fetchCSV = async () => {
   console.log("fetching csv");
   const response = await fetch('/players.csv');
@@ -55,25 +67,26 @@ const fetchCSV = async () => {
   return csv(rawData);
 };
 
-
-// App component
-const App = () => {
+// Strategy component
+const Strategy = ({ team }) => {
   const [players, setPlayers] = useState([]);
   const [grid, setGrid] = useState(Array.from({ length: 12 }, () => null)); // Assuming a 3x4 grid
 
   useEffect(() => {
     // Fetch and parse the CSV data on component mount
     csv('/players.csv').then((data) => {
-      // Transform the data and set the players state
-      const transformedData = data.map((player) => ({
-        ...player,
-        image: `/images/${player.image}`, // Adjust the path as necessary
-        attackScore: Number(player.attackScore), // Ensure the scores are numbers
-        defenseScore: Number(player.defenseScore),
-      }));
-      setPlayers(transformedData);
+      // Filter the data for the selected team and set the players state
+      const teamPlayers = data
+        .filter(player => player.team === selectedTeam) // Filter by selectedTeam
+        .map((player) => ({
+          ...player,
+          image: `/images/${player.image}`,
+          attackScore: Number(player.attackScore),
+          defenseScore: Number(player.defenseScore),
+        }));
+      setPlayers(teamPlayers);
     });
-  }, []);
+  }, [selectedTeam]);
 
   const movePlayer = (playerId, slot) => {
     setGrid((prevGrid) => {
@@ -115,4 +128,25 @@ const App = () => {
 
 };
 
-export default App;
+// CreateGame component
+const CreateGame = () => {
+  const [selectedTeam, setSelectedTeam] = useState(null);
+
+  const handleTeamSelected = (team) => {
+    setSelectedTeam(team);
+  };
+
+  // If a team is selected, render CreateGame; otherwise, render SelectTeam
+  return (
+    <div className="team-setup-container">
+      {selectedTeam ? (
+        <Strategy team={selectedTeam} />
+      ) : (
+        <SelectTeam onTeamSelected={handleTeamSelected} />
+      )}
+    </div>
+  );
+};
+
+
+export default CreateGame;

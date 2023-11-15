@@ -1,0 +1,13 @@
+.game-details-container {
+  padding: 20px;
+}
+
+.game-details-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Further details style */
+.game-detail {
+  margin-bottom: 10px;
+}
