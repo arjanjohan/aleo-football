@@ -1,0 +1,70 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+/* App.css */
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  gap: 10px;
+  padding: 10%; /* This adds space around the grid, adjust as needed */
+  background-image: url('/field.png');
+  background-size: cover; /* This makes sure the image covers the entire grid */
+  position: relative; /* Needed for absolute positioning of the grid slots */
+}
+
+/* Adjust the GridSlot style to make it transparent so the field shows */
+.grid-slot {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute; /* Positioned absolutely to sit on top of the background */
+}
+
+/* Additional styles for the grid slots to correctly position them */
+/* You'll need to adjust the top and left values based on your layout */
+.grid-slot:nth-child(1) { top: 10%; left: 10%; }
+/* Add similar rules for each child with appropriate top and left values */
