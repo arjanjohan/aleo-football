@@ -1,16 +1,15 @@
+// Navbar.jsx
 import React from 'react';
-import logo from '/super-leo-lig-logo.png'; // Update the path to where you save your logo
-import './Navbar.css';
+import { Link } from 'react-router-dom';
+import './Navbar.css'; // Make sure this is correctly importing your CSS
 
 const Navbar = () => {
   return (
     <nav className="navbar">
-      <img src={logo} alt="Super Leo Lig" className="navbar-logo" />
-      <div className="navbar-menu">
-        <a href="/create-game" className="navbar-item">Create Game</a>
-        <a href="/games" className="navbar-item">Games</a>
-        <a href="/leaderboard" className="navbar-item">Leaderboard</a>
-      </div>
+      <Link to="/" className="navbar-item">Home</Link>
+      <Link to="/create-game" className="navbar-item">Create Game</Link>
+      <Link to="/games" className="navbar-item">Games</Link>
+      <Link to="/leaderboard" className="navbar-item">Leaderboard</Link>
     </nav>
   );
 };
