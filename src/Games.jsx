@@ -16,7 +16,7 @@ const Games = () => {
       homeLogo: "club_1.jpeg",
       awayTeam: "Tigers",
       awayLogo: "club_2.jpeg",
-      outcome: "1-0",
+      score: "2-1",
       state: "completed",
     },
     {
@@ -25,7 +25,7 @@ const Games = () => {
       homeLogo: "club_1.jpeg",
       awayTeam: "Bears",
       awayLogo: "club_3.jpeg",
-      outcome: "1-0",
+      score: "8-0",
       state: "completed",
     },
     {
@@ -34,7 +34,16 @@ const Games = () => {
       homeLogo: "club_2.jpeg",
       awayTeam: "Cars",
       awayLogo: "club_3.jpeg",
-      outcome: "1-0",
+      score: "5-0",
+      state: "completed",
+    },
+    {
+      id: 4,
+      homeTeam: "Dogs",
+      homeLogo: "club_2.jpeg",
+      awayTeam: "Cars",
+      awayLogo: "club_3.jpeg",
+      score: "5-0",
       state: "completed",
     },
     // ... other games
@@ -42,17 +51,17 @@ const Games = () => {
 
   return (
     <section className="w-screen p-4 ">
-      <div className="flex w-full justify-center mt-4">
+      <div className="flex w-full justify-center mt-2">
         <div className="flex w-full  max-w-sm items-center space-x-2">
           <Input type="text" className="text-black" placeholder="Room ID" />
           <Button type="submit">Join Room</Button>
         </div>
       </div>
-      <div className="grid grid-cols-3 -mt-4 gap-4">
+      <div className="grid grid-cols-3 space-y-2 mx-auto mt-4 content-center items-center justify-center">
         {games.map((game) => (
           <Card
             key={game.id}
-            className=" my-10 max-w-md shadow-lg rounded-xl overflow-hidden"
+            className="  max-w-md shadow-lg rounded-xl overflow-hidden"
           >
             <div className="flex flex-col sm:flex-row justify-between p-6 space-y-6 sm:space-y-0">
               <div className="flex items-center space-x-4">
@@ -73,9 +82,9 @@ const Games = () => {
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Premier League
                 </p>
-                <p className="text-xl font-bold">3 - 2</p>
+                <p className="text-xl font-bold">{game.score}</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Full Time
+                  {game.state === "completed" ? "Full Time" : "Ongoing"}
                 </p>
               </div>
               <div className="flex items-center space-x-4">

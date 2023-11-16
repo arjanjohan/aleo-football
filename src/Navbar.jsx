@@ -6,14 +6,14 @@ import "./Navbar.css"; // Make sure this is correctly importing your CSS
 import logo from "/logo_2.png"; // Update the path to your logo image
 const Navbar = () => {
   return (
-    <nav className=" w-screen z-10 flex bg-blue-400 justify-around items-center py-3 px-6">
+    <nav className=" w-screen z-10 flex bg-blue-400 justify-between items-center py-3 px-6">
       <div>
         <Link to="/" className="">
           {/* <Button variant="default">Home</Button> */}
           <img src={logo} alt="logo" className="w-16 h-16 " />
         </Link>
       </div>
-      <div className="flex items-center ">
+      <div className="flex items-center ml-8">
         <Link
           to="/games"
           className={buttonVariants({ variant: "link", size: "lg" })}
