@@ -88,6 +88,10 @@ program game_logic_v0001.aleo {
             }
         }
 
+        leaderboard.leo/update_score(game.owner, goals_1, goals_2);
+        leaderboard.leo/update_score(game.opponent, goals_2, goals_1);
+        
+
         return game_state {
             owner: game.owner,
             opponent: game.opponent,

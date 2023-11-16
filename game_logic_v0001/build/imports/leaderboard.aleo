@@ -9,11 +9,11 @@ struct User:
 
 
 mapping users:
-	key as field.public;
+	key as address.public;
 	value as User.public;
 
 function update_score:
-    input r0 as field.private;
+    input r0 as address.private;
     input r1 as u64.private;
     input r2 as u64.private;
     assert.eq self.caller self.signer;
@@ -21,7 +21,7 @@ function update_score:
     output r3 as leaderboard.aleo/update_score.future;
 
 finalize update_score:
-    input r0 as field.public;
+    input r0 as address.public;
     input r1 as u64.public;
     input r2 as u64.public;
     cast 0u64 0u64 0u64 0u64 0u64 into r3 as User;

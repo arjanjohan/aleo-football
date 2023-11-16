@@ -123,5 +123,15 @@ function play_game:
     gt r0.formation_2[10u32].attack r0.formation_1[10u32].defense into r64;
     add r60 1u64 into r65;
     ternary r64 r65 r60 into r66;
-    cast r0.owner r0.opponent r0.formation_1 r0.formation_2 r63 r66 true into r67 as game_state.record;
-    output r67 as game_state.record;
+    call leaderboard.aleo/update_score r0.owner r63 r66 into r67;
+    call leaderboard.aleo/update_score r0.opponent r66 r63 into r68;
+    cast r0.owner r0.opponent r0.formation_1 r0.formation_2 r63 r66 true into r69 as game_state.record;
+    async play_game r67 r68 into r70;
+    output r69 as game_state.record;
+    output r70 as game_logic_v0001.aleo/play_game.future;
+
+finalize play_game:
+    input r0 as leaderboard.aleo/update_score.future;
+    input r1 as leaderboard.aleo/update_score.future;
+    await r0;
+    await r1;
