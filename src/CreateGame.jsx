@@ -45,6 +45,8 @@ const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
     [isDisabled]
   );
 
+  console.log("48", player);
+
   return (
     <div ref={drop} className={`grid-slot ${isDisabled ? "disabled" : ""}`}>
       {player && !isDisabled && (
@@ -55,26 +57,43 @@ const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
 };
 
 const SelectTeam = ({ onTeamSelected, setIsGameStarted }) => {
+  const teams = [
+    {
+      name: "Team A",
+      image: "player_a",
+    },
+    {
+      name: "Team B",
+      image: "player_b",
+    },
+    {
+      name: "Team C",
+      image: "player_c",
+    },
+  ];
   return (
     <div className="select-team-container">
-      {["Team A", "Team B", "Team C"].map((team) => (
-        <button
-          key={team}
-          className="team-option"
-          onClick={() => {
-            console.log("team", team);
-            onTeamSelected(team);
-            setIsGameStarted(true);
-          }}
-        >
-          <img
-            src={`/images/player_${team.toLowerCase()}.png`}
-            alt={team}
-            className="team-image"
-          />
-          <div className="team-name">{team}</div>
-        </button>
-      ))}
+      {teams.map((team) => {
+        console.log("teams", team);
+        return (
+          <button
+            key={team.name}
+            className="team-option"
+            onClick={() => {
+              console.log("team", team.name);
+              onTeamSelected(team.name);
+              setIsGameStarted(true);
+            }}
+          >
+            <img
+              src={`/images/${team.image}.png`}
+              alt={team}
+              className="team-image"
+            />
+            <div className="team-name">{team.name}</div>
+          </button>
+        );
+      })}
     </div>
   );
 };
@@ -148,9 +167,12 @@ const Strategy = ({ selectedTeam }) => {
           })}
         </div>
         <div className="overview-container">
-          {players.map((player) => (
-            <Player key={player.id} player={player} movePlayer={movePlayer} />
-          ))}
+          {players.map((player) => {
+            console.log("152", player);
+            return (
+              <Player key={player.id} player={player} movePlayer={movePlayer} />
+            );
+          })}
         </div>
       </div>
     </DndProvider>
