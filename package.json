@@ -13,6 +13,10 @@
   },
   "dependencies": {
     "@aleohq/sdk": "^0.6.0",
+    "@demox-labs/aleo-wallet-adapter-base": "^0.0.20",
+    "@demox-labs/aleo-wallet-adapter-leo": "^0.0.19",
+    "@demox-labs/aleo-wallet-adapter-react": "^0.0.19",
+    "@demox-labs/aleo-wallet-adapter-reactui": "^0.0.31",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",

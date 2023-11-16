@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -13,11 +14,11 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import "./CreateGame.css";
 
-export function SelectDemo() {
+function SelectFormation() {
   return (
     <Select>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a formation" />
+      <SelectTrigger className="w-[180px] text-black">
+        <SelectValue className="" placeholder="Select a formation" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
@@ -32,7 +33,7 @@ export function SelectDemo() {
 }
 
 // Player.jsx
-const Player = ({ player, movePlayer }) => {
+const Player = ({ player, movePlayer, isActive }) => {
   const [, drag] = useDrag(() => ({
     type: "player",
     item: { id: player.id },
@@ -45,14 +46,41 @@ const Player = ({ player, movePlayer }) => {
   }));
 
   return (
-    <div ref={drag} className="player">
-      <img src={player.image} alt={player.name} className="player-image" />
-      <div className="player-stats">
-        <div className="player-name">{player.name}</div>
-        <div className="player-score">A: {player.attackScore}</div>
-        <div className="player-score">D: {player.defenseScore}</div>
+    <Card
+      className={`flex  bg-white ${
+        isActive ? "w-2/3 h-28 p-2" : "w-full h-32 p-4"
+      } shadow-lg  rounded-[2px]  transition duration-200 ease-in-out hover:scale-105 `}
+    >
+      <div
+        ref={drag}
+        className={`flex relative  ${
+          !isActive
+            ? " w-full h-full items-center justify-center"
+            : "w-full h-full"
+        } `}
+      >
+        <div className="flex items-center">
+          <img
+            src={player.image}
+            alt={player.name}
+            className={`${isActive ? "w-16 h-16  " : "w-14 h-14"} `}
+          />
+        </div>
+        <div
+          className={`text-black h-full flex flex-col items-center ${
+            isActive ? "gap-1" : "gap-2"
+          }`}
+        >
+          <p className="font-bold whitespace-nowrap">{player.name}</p>
+          <p className="">
+            <span className="font-bold">A:</span> {player.attackScore}
+          </p>
+          <p className="">
+            <span className="font-bold">D:</span> {player.defenseScore}
+          </p>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 
@@ -75,7 +103,7 @@ const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
   return (
     <div ref={drop} className={`grid-slot ${isDisabled ? "disabled" : ""}`}>
       {player && !isDisabled && (
-        <Player player={player} movePlayer={movePlayer} />
+        <Player player={player} movePlayer={movePlayer} isActive={true} />
       )}
     </div>
   );
@@ -103,19 +131,22 @@ const SelectTeam = ({ onTeamSelected, setIsGameStarted }) => {
         return (
           <button
             key={team.name}
-            className="team-option"
+            className="flex flex-col items-center border bg-neutral-100 cursor-pointer transition duration-300 ease-in-out p-2.5 w-64 h-80 rounded-[10px] border-solid hover:scale-105 border-[#ddd]"
             onClick={() => {
               console.log("team", team.name);
               onTeamSelected(team.name);
               setIsGameStarted(true);
             }}
+            q
           >
             <img
               src={`/images/${team.image}.png`}
               alt={team}
-              className="team-image"
+              className="w-48 h-64"
             />
-            <div className="team-name">{team.name}</div>
+            <h3 className="font-bold text-xl text-black tracking-tighter mt-2">
+              {team.name}
+            </h3>
           </button>
         );
       })}
@@ -242,6 +273,8 @@ const Strategy = ({ selectedTeam }) => {
     });
   };
 
+  //TODO make the players removable with double click
+
   useEffect(() => {
     // Calculate total attack and defense whenever activePlayers changes
     const newTotalAttack = activePlayers.reduce(
@@ -259,10 +292,12 @@ const Strategy = ({ selectedTeam }) => {
   }, [activePlayers]);
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex flex-row p-16 h-full gap-4">
-        <div className="grid-container w-[60%]">
+      <div className="flex flex-row px-16 py-8 bg-white h-[90vh] w-full gap-4">
+        <div className=" relative bg-field grid grid-cols-4  bg-cover object-contain bg-center max-h-[85vh]  bg-no-repeat w-full   ">
+          <SelectFormation />
+
+          {/* <div className="grid-container "> */}
           {grid.map((player, index) => {
-            // Determine if the current slot should be disabled
             const isDisabled = index === 0 || index === 8; // Disables the top left and bottom left slots in a 3x4 grid
             return (
               <GridSlot
@@ -275,19 +310,23 @@ const Strategy = ({ selectedTeam }) => {
             );
           })}
         </div>
-        <div className="flex flex-col w-1/3">
-          <div className="flex flex-col py-4 whitespace-nowrap">
-            <h1>Current Attack : {totalAttack}</h1>
-            <h1>Current Defence : {totalDefence}</h1>
+        <div className="flex flex-col w-1/3 h-auto bg-black px-4 rounded-md">
+          <div className="flex flex-col py-4 px-4 whitespace-nowrap">
+            <h1 className="text-xl tracking-tighter">
+              Current Attack : {totalAttack}
+            </h1>
+            <h1 className="text-xl tracking-tighter">
+              Current Defence : {totalDefence}
+            </h1>
           </div>
-          <div className="w-full flex flex-col overflow-y-auto h-[calc(100vh_-_40px)] p-5">
+          <div className="w-full grid grid-cols-2 gap-2 overflow-y-auto h-[calc(100vh_-_40px)] p-5">
             {benchPlayers.map((player) => {
-              // console.log("152", player);
               return (
                 <Player
                   key={player.id}
                   player={player}
                   movePlayer={movePlayer}
+                  isActive={false}
                 />
               );
             })}
@@ -313,12 +352,12 @@ const CreateGame = () => {
 
   // If a team is selected, render CreateGame; otherwise, render SelectTeam
   return (
-    <div className="team-setup-container">
+    <div className="">
       {isGameStarted ? (
         <Strategy selectedTeam={selectedTeam} />
       ) : (
-        <div className="flex justify-center items-center flex-col mt-8 h-full">
-          <h1 className="text-3xl tracking-tighter">Select your team</h1>
+        <div className="flex justify-center items-center flex-col mt-8 h-full gap-4">
+          <h1 className="text-5xl tracking-tighter ">Select your team</h1>
           <SelectTeam
             setIsGameStarted={setIsGameStarted}
             onTeamSelected={handleTeamSelected}
