@@ -18,7 +18,7 @@
 - [Team](#team)
 
 ## Diagram
-![diagram](https://github.com/zkAutochess/zkAutochess/blob/6423819e59e02654b2e04413f7c4d5ecaeed3555/files/schema-red.png)
+![diagram](https://github.com/arjanjohan/aleo-football/blob/d02fd71a8c20f54cd3cde26cc232b5123f0bcdbe/public/flow.png)
 
 ## Links
 - [Deployed game]()
@@ -28,7 +28,7 @@
 
 ## Hackathon bounties
 #### ​Kryha - Best zkLeaderboard 
-The leaderboard leo contract is extended to include more fields. We log the results (win, draw and loss) and goals score/conceded. Based on these values we can calculate score, games played and goal difference values that are shown in the frontend.
+The leaderboard leo contract is extended to include more fields. We log the results (win, draw and loss) and goals score/conceded. Based on these values we can calculate total points, number of games played and goal difference values that are also shown in the frontend. The update_score function from the leaderboard contract is called from the game_logic contract. After each game is played, the leaderboard will update based on the outcome.
 
 #### Puzzle - Best Casino Game
 Our project leverages the Puzzle SDK to prevent ghosting by players who think they will lose after the formations are revealed. By setting a timelock on the multisig, the player who ghosts will automatically forfeit the game if the timelock expires. This mechanic ensures all games will be played, since the outcome of forfeiting is always worse than playing the game.
