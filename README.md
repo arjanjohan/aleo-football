@@ -1,6 +1,6 @@
 # Super Leo Lig
 
-<img src="https://github.com/arjanjohan/aleo-football/blob/ecb63d50fed2d089bd8076bf01c6afc6eb0ed189/public/super-leo-lig-logo.png" alt="logo" width="500"/>
+<img src="https://github.com/arjanjohan/aleo-football/blob/cc1f8b8f7e0dfc350ab39ee87ffa07d1dcfa14e0/public/logo_2.png" alt="logo" width="500"/>
 
 ⚔️ Super Leo Lig is an on-chain football manager game that leverages the privacy that Aleo provides to hide players' strategies from opponents.
 
