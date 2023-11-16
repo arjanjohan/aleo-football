@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { csv } from 'd3';
-import './CreateGame.css';
+import { csv } from "d3";
+import React, { useEffect, useState } from "react";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import "./CreateGame.css";
 
 // Player.jsx
 const Player = ({ player, movePlayer }) => {
   const [, drag] = useDrag(() => ({
-    type: 'player',
+    type: "player",
     item: { id: player.id },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
@@ -16,6 +16,8 @@ const Player = ({ player, movePlayer }) => {
       }
     },
   }));
+
+  console.log("player 20", player);
 
   return (
     <div ref={drag} className="player">
@@ -31,59 +33,100 @@ const Player = ({ player, movePlayer }) => {
 
 // GridSlot component
 const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: 'player',
-    canDrop: () => !isDisabled,
-    drop: () => ({ slot }),
-    collect: monitor => ({
-      isOver: !!monitor.isOver()
+  const [{ isOver }, drop] = useDrop(
+    () => ({
+      accept: "player",
+      canDrop: () => !isDisabled,
+      drop: () => ({ slot }),
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+      }),
     }),
-  }), [isDisabled]);
+    [isDisabled]
+  );
+
+  console.log("48", player);
 
   return (
-    <div ref={drop} className={`grid-slot ${isDisabled ? 'disabled' : ''}`}>
-      {player && !isDisabled && <Player player={player} movePlayer={movePlayer} />}
+    <div ref={drop} className={`grid-slot ${isDisabled ? "disabled" : ""}`}>
+      {player && !isDisabled && (
+        <Player player={player} movePlayer={movePlayer} />
+      )}
     </div>
   );
 };
 
-const SelectTeam = ({ onTeamSelected }) => {
+const SelectTeam = ({ onTeamSelected, setIsGameStarted }) => {
+  const teams = [
+    {
+      name: "Team A",
+      image: "player_a",
+    },
+    {
+      name: "Team B",
+      image: "player_b",
+    },
+    {
+      name: "Team C",
+      image: "player_c",
+    },
+  ];
   return (
     <div className="select-team-container">
-      {['A', 'B', 'C'].map((team) => (
-        <button key={team} className="team-option" onClick={() => onTeamSelected(team)}>
-          <img src={`/images/player_${team.toLowerCase()}.png`} alt={team} className="team-image" />
-          <div className="team-name">{team}</div>
-        </button>
-      ))}
+      {teams.map((team) => {
+        console.log("teams", team);
+        return (
+          <button
+            key={team.name}
+            className="team-option"
+            onClick={() => {
+              console.log("team", team.name);
+              onTeamSelected(team.name);
+              setIsGameStarted(true);
+            }}
+          >
+            <img
+              src={`/images/${team.image}.png`}
+              alt={team}
+              className="team-image"
+            />
+            <div className="team-name">{team.name}</div>
+          </button>
+        );
+      })}
     </div>
   );
 };
 
 const fetchCSV = async () => {
   console.log("fetching csv");
-  const response = await fetch('/players.csv');
+  const response = await fetch("/players.csv");
   const rawData = await response.text();
   return csv(rawData);
 };
 
 // Strategy component
-const Strategy = ({ team }) => {
+const Strategy = ({ selectedTeam }) => {
   const [players, setPlayers] = useState([]);
   const [grid, setGrid] = useState(Array.from({ length: 12 }, () => null)); // Assuming a 3x4 grid
 
   useEffect(() => {
     // Fetch and parse the CSV data on component mount
-    csv('/players.csv').then((data) => {
+    csv("/players.csv").then((data) => {
+      console.log("data 95", data, selectedTeam);
       // Filter the data for the selected team and set the players state
       const teamPlayers = data
-        .filter(player => player.team === selectedTeam) // Filter by selectedTeam
+        .filter((player) => player.team === selectedTeam) // Filter by selectedTeam
         .map((player) => ({
           ...player,
           image: `/images/${player.image}`,
           attackScore: Number(player.attackScore),
           defenseScore: Number(player.defenseScore),
         }));
+      console.log(
+        "🚀 ~ file: CreateGame.jsx:103 ~ csv ~ teamPlayers:",
+        teamPlayers
+      );
       setPlayers(teamPlayers);
     });
   }, [selectedTeam]);
@@ -113,24 +156,35 @@ const Strategy = ({ team }) => {
             // Determine if the current slot should be disabled
             const isDisabled = index === 0 || index === 8; // Disables the top left and bottom left slots in a 3x4 grid
             return (
-              <GridSlot key={index} slot={index} player={player} movePlayer={movePlayer} isDisabled={isDisabled} />
+              <GridSlot
+                key={index}
+                slot={index}
+                player={player}
+                movePlayer={movePlayer}
+                isDisabled={isDisabled}
+              />
             );
           })}
         </div>
         <div className="overview-container">
-          {players.map((player) => (
-            <Player key={player.id} player={player} movePlayer={movePlayer} />
-          ))}
+          {players.map((player) => {
+            console.log("152", player);
+            return (
+              <Player key={player.id} player={player} movePlayer={movePlayer} />
+            );
+          })}
         </div>
       </div>
     </DndProvider>
   );
-
 };
 
 // CreateGame component
 const CreateGame = () => {
+  const [isGameStarted, setIsGameStarted] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
+
+  console.log("isGamestarted", isGameStarted, selectedTeam);
 
   const handleTeamSelected = (team) => {
     setSelectedTeam(team);
@@ -139,14 +193,16 @@ const CreateGame = () => {
   // If a team is selected, render CreateGame; otherwise, render SelectTeam
   return (
     <div className="team-setup-container">
-      {selectedTeam ? (
-        <Strategy team={selectedTeam} />
+      {isGameStarted ? (
+        <Strategy selectedTeam={selectedTeam} />
       ) : (
-        <SelectTeam onTeamSelected={handleTeamSelected} />
+        <SelectTeam
+          setIsGameStarted={setIsGameStarted}
+          onTeamSelected={handleTeamSelected}
+        />
       )}
     </div>
   );
 };
-
 
 export default CreateGame;

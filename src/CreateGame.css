@@ -5,7 +5,6 @@
   text-align: center;
 }
 
-
 .app-container {
   display: flex;
   width: 100vh;
@@ -22,7 +21,7 @@
   width: 66.66%; /* Two-thirds of the container */
   height: auto; /* Adjust based on content */
   position: relative;
-  background-image: url('/field.png');
+  background-image: url("/field.png");
   background-size: cover;
   background-position: center; /* Center the background image */
 }
@@ -53,7 +52,10 @@
 
 /* Additional styles for the grid slots to correctly position them */
 /* You'll need to adjust the top and left values based on your layout */
-.grid-slot:nth-child(1) { top: 10%; left: 10%; }
+.grid-slot:nth-child(1) {
+  top: 10%;
+  left: 10%;
+}
 /* Add similar rules for each child with appropriate top and left values */
 
 /* App.css */
@@ -114,8 +116,8 @@
 .team-image {
   width: 200px; /* Set width to 200px */
   height: 200px; /* Set height to 200px */
-  object-fit: cover; /* This will ensure the image covers the area without distorting aspect ratio */
-  border-radius: 50%; /* This makes the image round, remove if you want a square */
+  object-fit: fit; /* This will ensure the image covers the area without distorting aspect ratio */
+  /* border-radius: 50%; */
   margin-bottom: 10px;
 }
 
