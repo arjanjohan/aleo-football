@@ -1,4 +1,4 @@
-program game_logic.aleo;
+program game.aleo;
 
 struct Player:
     id as u64;
