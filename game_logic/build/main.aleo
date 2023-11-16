@@ -10,9 +10,12 @@ record game_state:
     opponent as address.private;
     strategy_1 as [Player; 11u32].private;
     strategy_2 as [Player; 11u32].private;
-    goals_1 as u64.private;
-    goals_2 as u64.private;
-    game_finished as boolean.private;
+    goals_1 as u64.public;
+    goals_2 as u64.public;
+    game_finished as boolean.public;
+
+
+function main:
 
 
 function create_game_private:
@@ -31,7 +34,6 @@ function create_game_open:
 function join_game:
     input r0 as game_state.record;
     input r1 as [Player; 11u32].private;
-    assert.eq r0.owner r0.opponent;
     cast r0.owner self.caller r0.strategy_1 r1 r0.goals_1 r0.goals_1 false into r2 as game_state.record;
     output r2 as game_state.record;
 

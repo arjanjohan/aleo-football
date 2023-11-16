@@ -84,15 +84,15 @@ const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
 const SelectTeam = ({ onTeamSelected, setIsGameStarted }) => {
   const teams = [
     {
-      name: "Team A",
+      name: "Fenerbahce",
       image: "player_a",
     },
     {
-      name: "Team B",
+      name: "Besiktas",
       image: "player_b",
     },
     {
-      name: "Team C",
+      name: "Galatasaray",
       image: "player_c",
     },
   ];
