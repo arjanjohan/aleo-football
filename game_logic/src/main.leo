@@ -1,4 +1,4 @@
-
+import leaderboard.leo;
 // The 'game_logic' program.
 program game_logic.aleo {
 

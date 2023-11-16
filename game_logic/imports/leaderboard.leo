@@ -1,7 +1,6 @@
 program leaderboard.aleo {
     struct User {
         score: u64,
-        played: u64,
         win: u64,
         draw: u64,
         loss: u64,
@@ -16,10 +15,9 @@ program leaderboard.aleo {
         return then finalize(user_id, goals_scored, goals_conceded);
     }
 
-    finalize update_score(user_id: field, , goals_scored: u64, goals_conceded: u64) {
+    finalize update_score(user_id: field, goals_scored: u64, goals_conceded: u64) {
         let current_user: User = Mapping::get_or_use(users, user_id, User {
             score: 0u64,
-            played: 0u64,
             win: 0u64,
             draw: 0u64,
             loss: 0u64,
@@ -29,10 +27,7 @@ program leaderboard.aleo {
 
         Mapping::set(users, user_id, User {
             // Win is 3 points, draw is 1 point
-            score: goals_scored > goals_conceded ? current_user.score + 3u64 : (goals_scored == goals_conceded ? current_user.score + 1u64, current_user.score),
-            
-            // Increment played
-            played: current_user.played + 1u64,
+            score: goals_scored > goals_conceded ? current_user.score + 3u64 : (goals_scored == goals_conceded ? current_user.score + 1u64 : current_user.score),
 
             // Update result by 1
             win: goals_scored > goals_conceded ? current_user.win + 1u64 : current_user.win,
