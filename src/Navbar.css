@@ -1,46 +1,35 @@
 /* App.css */
 
 .navbar {
-    display: flex;
-    align-items: center;
-    background-color: #333; /* or any color that matches your theme */
-    color: white;
-    padding: 0.5rem 1rem;
-  }
-  
-  .navbar-logo {
-    height: 70px; /* Adjust the logo size to fit the navbar */
-    margin-right: 1rem;
-  }
-  
-  .navbar-menu {
-    display: flex;
-    align-items: center;
-  }
-  
+  display: flex;
+  align-items: center;
+  background-color: #333; /* or any color that matches your theme */
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+.navbar-logo {
+  height: 70px; /* Adjust the logo size to fit the navbar */
+  margin-right: 1rem;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-item:hover,
+.navbar-item:focus {
+  background-color: #0056b3; /* A darker shade when hovering or focusing */
+  color: #fff;
+  text-decoration: none; /* Ensures no underline on hover */
+  outline: none; /* Removes the focus outline */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
   .navbar-item {
-    margin-left: 1rem;
-    padding: 0.5rem 1rem; /* Add padding to make the buttons larger and more clickable */
-    text-decoration: none;
-    color: white;
-    background-color: #007bff; /* Bootstrap primary button color for reference */
-    border: none;
-    border-radius: 0.25rem; /* Rounded borders */
-    transition: background-color 0.3s, color 0.3s;
+    margin-left: 0.5rem; /* Less margin on smaller screens */
+    padding: 0.5rem; /* Smaller padding on smaller screens */
   }
-  
-  .navbar-item:hover, .navbar-item:focus {
-    background-color: #0056b3; /* A darker shade when hovering or focusing */
-    color: #fff;
-    text-decoration: none; /* Ensures no underline on hover */
-    outline: none; /* Removes the focus outline */
-  }
-  
-  /* Responsive adjustments for smaller screens */
-  @media (max-width: 768px) {
-    .navbar-item {
-      margin-left: 0.5rem; /* Less margin on smaller screens */
-      padding: 0.5rem; /* Smaller padding on smaller screens */
-    }
-  }
-  
+}

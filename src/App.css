@@ -1,19 +1,18 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
+  /* text-align: center; */
 }
 
-
-.app-container {
+/* .app-container {
   display: flex;
   width: 100vh;
   justify-content: center;
-  align-items: flex-start; /* Align to the top */
+  align-items: flex-start; 
   height: 120vh;
-  padding-top: 20px; /* Add some space at the top */
-}
+  padding-top: 20px; 
+} */
 
 .grid-container {
   display: grid;
@@ -22,7 +21,7 @@
   width: 66.66%; /* Two-thirds of the container */
   height: auto; /* Adjust based on content */
   position: relative;
-  background-image: url('/field.png');
+  background-image: url("/field.png");
   background-size: cover;
   background-position: center; /* Center the background image */
 }
@@ -53,7 +52,10 @@
 
 /* Additional styles for the grid slots to correctly position them */
 /* You'll need to adjust the top and left values based on your layout */
-.grid-slot:nth-child(1) { top: 10%; left: 10%; }
+.grid-slot:nth-child(1) {
+  top: 10%;
+  left: 10%;
+}
 /* Add similar rules for each child with appropriate top and left values */
 
 /* App.css */

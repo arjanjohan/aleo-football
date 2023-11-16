@@ -1,18 +1,18 @@
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
+} */
 
-.app-container {
+/* .app-container {
   display: flex;
   width: 100vh;
   justify-content: center;
-  align-items: flex-start; /* Align to the top */
+  align-items: flex-start;
   height: 120vh;
-  padding-top: 20px; /* Add some space at the top */
-}
+  padding-top: 20px; 
+} */
 
 .grid-container {
   display: grid;

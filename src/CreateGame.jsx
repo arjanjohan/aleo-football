@@ -1,8 +1,35 @@
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { csv } from "d3";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import "./CreateGame.css";
+
+export function SelectDemo() {
+  return (
+    <Select>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Select a formation" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Formations</SelectLabel>
+          <SelectItem value="0">4-3-3</SelectItem>
+          <SelectItem value="1">4-2-3-1</SelectItem>
+          <SelectItem value="2">3-5-2</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+}
 
 // Player.jsx
 const Player = ({ player, movePlayer }) => {
@@ -16,8 +43,6 @@ const Player = ({ player, movePlayer }) => {
       }
     },
   }));
-
-  console.log("player 20", player);
 
   return (
     <div ref={drag} className="player">
@@ -45,7 +70,7 @@ const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
     [isDisabled]
   );
 
-  console.log("48", player);
+  // console.log("48", player);
 
   return (
     <div ref={drop} className={`grid-slot ${isDisabled ? "disabled" : ""}`}>
@@ -107,8 +132,11 @@ const fetchCSV = async () => {
 
 // Strategy component
 const Strategy = ({ selectedTeam }) => {
-  const [players, setPlayers] = useState([]);
-  const [grid, setGrid] = useState(Array.from({ length: 12 }, () => null)); // Assuming a 3x4 grid
+  const [activePlayers, setActivePlayers] = useState([]);
+  const [benchPlayers, setBenchPlayers] = useState([]);
+  const [totalAttack, setTotalAttack] = useState(0);
+  const [totalDefence, setTotalDefense] = useState(0);
+  const [grid, setGrid] = useState(Array.from({ length: 16 }, () => null)); // Assuming a 3x4 grid
 
   useEffect(() => {
     // Fetch and parse the CSV data on component mount
@@ -122,36 +150,117 @@ const Strategy = ({ selectedTeam }) => {
           image: `/images/${player.image}`,
           attackScore: Number(player.attackScore),
           defenseScore: Number(player.defenseScore),
-        }));
+        }))
+        .sort((a, b) => a.id - b.id);
       console.log(
         "🚀 ~ file: CreateGame.jsx:103 ~ csv ~ teamPlayers:",
         teamPlayers
       );
-      setPlayers(teamPlayers);
+      setBenchPlayers(teamPlayers);
     });
   }, [selectedTeam]);
+
+  // const movePlayer = (playerId, slot) => {
+  //   setGrid((prevGrid) => {
+  //     const newGrid = [...prevGrid];
+  //     const playerIndex = benchPlayers.findIndex((p) => p.id === playerId);
+  //     const player = benchPlayers[playerIndex];
+
+  //     if (playerIndex !== -1) {
+  //       setBenchPlayers((prevPlayers) =>
+  //         prevPlayers.filter((p) => p.id !== playerId)
+  //       );
+  //     }
+  //     const targetIndex = newGrid.findIndex((p) => p?.id === playerId);
+
+  //     if (targetIndex !== -1) {
+  //       newGrid[targetIndex] = null;
+  //     }
+
+  //     setActivePlayers(newGrid.filter((p) => p !== null));
+
+  //     newGrid[slot] = player;
+
+  //     return newGrid;
+  //   });
+  // };
+
+  //TODO add formation dropdown for team
 
   const movePlayer = (playerId, slot) => {
     setGrid((prevGrid) => {
       const newGrid = [...prevGrid];
-      const playerIndex = players.findIndex((p) => p.id === playerId);
-      const player = players[playerIndex];
-      const targetIndex = newGrid.findIndex((p) => p?.id === playerId);
+      const playerIndexOnField = activePlayers.findIndex(
+        (p) => p.id === playerId
+      );
+      const playerIndexOnBench = benchPlayers.findIndex(
+        (p) => p.id === playerId
+      );
 
-      if (targetIndex !== -1) {
-        newGrid[targetIndex] = null;
+      if (playerIndexOnField !== -1) {
+        const replacedPlayer = newGrid[slot];
+
+        // Remove the player from the field
+        setActivePlayers((prevPlayers) =>
+          prevPlayers.map((p, index) =>
+            index === playerIndexOnField ? null : p
+          )
+        );
+
+        // Add the replaced player back to the bench with sorted order
+        if (replacedPlayer) {
+          setBenchPlayers((prevPlayers) =>
+            [...prevPlayers, replacedPlayer].sort((a, b) => a.id - b.id)
+          );
+        }
+      } else if (playerIndexOnBench !== -1) {
+        // Remove the player from the bench
+        setBenchPlayers((prevPlayers) =>
+          prevPlayers.filter((p) => p.id !== playerId)
+        );
+
+        // Add the player to the field
+        setActivePlayers((prevPlayers) => {
+          const updatedPlayers = [...prevPlayers];
+          updatedPlayers[slot] = benchPlayers[playerIndexOnBench];
+          return updatedPlayers;
+        });
+
+        // Add the replaced player back to the bench with sorted order
+        const replacedPlayer = newGrid[slot];
+        if (replacedPlayer) {
+          setBenchPlayers((prevPlayers) =>
+            [...prevPlayers, replacedPlayer].sort((a, b) => a.id - b.id)
+          );
+        }
       }
 
-      newGrid[slot] = player;
+      // Update the newGrid with the correct player object
+      newGrid[slot] = benchPlayers[playerIndexOnBench];
 
       return newGrid;
     });
   };
 
+  useEffect(() => {
+    // Calculate total attack and defense whenever activePlayers changes
+    const newTotalAttack = activePlayers.reduce(
+      (sum, player) => (player ? sum + player.attackScore : sum),
+      0
+    );
+    const newTotalDefense = activePlayers.reduce(
+      (sum, player) => (player ? sum + player.defenseScore : sum),
+      0
+    );
+
+    // Update the state with the new totals
+    setTotalAttack(newTotalAttack);
+    setTotalDefense(newTotalDefense);
+  }, [activePlayers]);
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="app-container">
-        <div className="grid-container">
+      <div className="flex flex-row p-16 h-full gap-4">
+        <div className="grid-container w-[60%]">
           {grid.map((player, index) => {
             // Determine if the current slot should be disabled
             const isDisabled = index === 0 || index === 8; // Disables the top left and bottom left slots in a 3x4 grid
@@ -166,18 +275,30 @@ const Strategy = ({ selectedTeam }) => {
             );
           })}
         </div>
-        <div className="overview-container">
-          {players.map((player) => {
-            console.log("152", player);
-            return (
-              <Player key={player.id} player={player} movePlayer={movePlayer} />
-            );
-          })}
+        <div className="flex flex-col w-1/3">
+          <div className="flex flex-col py-4 whitespace-nowrap">
+            <h1>Current Attack : {totalAttack}</h1>
+            <h1>Current Defence : {totalDefence}</h1>
+          </div>
+          <div className="w-full flex flex-col overflow-y-auto h-[calc(100vh_-_40px)] p-5">
+            {benchPlayers.map((player) => {
+              // console.log("152", player);
+              return (
+                <Player
+                  key={player.id}
+                  player={player}
+                  movePlayer={movePlayer}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </DndProvider>
   );
 };
+
+// ... (rest of the code)
 
 // CreateGame component
 const CreateGame = () => {
@@ -196,10 +317,13 @@ const CreateGame = () => {
       {isGameStarted ? (
         <Strategy selectedTeam={selectedTeam} />
       ) : (
-        <SelectTeam
-          setIsGameStarted={setIsGameStarted}
-          onTeamSelected={handleTeamSelected}
-        />
+        <div className="flex justify-center items-center flex-col mt-8 h-full">
+          <h1 className="text-3xl tracking-tighter">Select your team</h1>
+          <SelectTeam
+            setIsGameStarted={setIsGameStarted}
+            onTeamSelected={handleTeamSelected}
+          />
+        </div>
       )}
     </div>
   );
