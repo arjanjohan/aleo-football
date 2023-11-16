@@ -1,4 +1,4 @@
-# helloworld.aleo
+# game_logic.aleo
 
 ## Build Guide
 
