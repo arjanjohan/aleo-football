@@ -26,6 +26,10 @@
 - [Presentation slides]()
 - [Deployed contract]()
 
+## Hackathon bounties
+The leaderboard is extended to include more fields. We log the results (win, draw and loss) and goals score/conceded. Based on these values we can calculate score, games played and goal difference values that are shown in the frontend.
+
+
 ## Team
 This project was build at ZK Hack Istanbul 2023 by:
 

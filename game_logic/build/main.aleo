@@ -8,8 +8,8 @@ struct Player:
     defense as u64;
 
 record game_state:
-    owner as address.private;
-    opponent as address.private;
+    owner as address.public;
+    opponent as address.public;
     formation_1 as [Player; 11u32].private;
     formation_2 as [Player; 11u32].private;
     goals_1 as u64.public;
@@ -18,6 +18,7 @@ record game_state:
 
 
 function main:
+    input r0 as boolean.private;
 
 
 function create_game_private:

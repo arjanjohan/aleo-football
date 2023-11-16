@@ -8,11 +8,9 @@ program game_logic.aleo {
         defense: u64,
     }
 
-
-
     record game_state {
-        owner: address
-        opponent: address,
+        public owner: address
+        public opponent: address,
         formation_1: [Player; 11],
         formation_2: [Player; 11],
         public goals_1: u64,
@@ -20,7 +18,7 @@ program game_logic.aleo {
         public game_finished: bool,
     }   
 
-    transition main () {
+    transition main (a: bool) {
         
     }
 
@@ -29,6 +27,7 @@ program game_logic.aleo {
             owner: self.caller,
             opponent: opponent,
             formation_1: formation,
+            // Since there is no null value, prefill formation_2 with dummy values
             formation_2: formation,
             goals_1: 0u64,
             goals_2: 0u64,
