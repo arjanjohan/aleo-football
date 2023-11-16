@@ -7,24 +7,24 @@ program game_logic.aleo {
         return c;
     }
 
-    transition create_game(
+    transition new_game(
         strategy: [Player; 11],
         opponent: address,
     ) -> game.leo/game_state.record {
 
         let state: game_state = game.leo/create_game(strategy, opponent);
 
-        return state
+        return state;
 
     }
 
-    transition join_game(
+    transition accept_game(
         game: game_state, 
         strategy: [Player; 11],
     ) -> game.leo/game_state.record {
 
         let state: game_state = game.leo/join_game(game, strategy);
 
-        return state
+        return state;
     }
 }
