@@ -8,6 +8,14 @@ program game_logic.aleo {
         defense: u64,
     }
 
+    record gameStruct {
+        owner: address
+        opponent: address,
+        goals_1: u64,
+        goals_2: u64,
+        game_finished: bool,
+    }   
+
     record game_state {
         public owner: address
         public opponent: address,
