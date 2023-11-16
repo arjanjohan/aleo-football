@@ -1,6 +1,6 @@
 import leaderboard.leo;
 // The 'game_logic' program.
-program game_logic.aleo {
+program game_logic_v0001.aleo {
 
     struct Player {
         id: u64,
@@ -28,6 +28,10 @@ program game_logic.aleo {
 
     transition main (a: bool) {
         
+    }
+
+    transition xabc (a: field) -> bool {
+        return true;
     }
 
     transition create_game_private (formation: [Player; 11], opponent: address) -> game_state {
@@ -59,6 +63,7 @@ program game_logic.aleo {
     transition join_game (game: game_state, formation: [Player; 11]) -> game_state {
         // Only if opponent is equal to owner, a new player is allowed to join. Otherwise there is already an opponent.
         // assert_eq(game.owner, game.opponent) || assert_eq(self.caller, game.opponent);
+        assert(!game.game_finished);
         
         return game_state {
             owner: game.owner,
@@ -88,8 +93,8 @@ program game_logic.aleo {
             opponent: game.opponent,
             formation_1: game.formation_1,
             formation_2: game.formation_2,
-            goals_1: 0u64,
-            goals_2: 0u64,
+            goals_1: goals_1,
+            goals_2: goals_2,
             game_finished: true,
         };
     }

@@ -1,11 +1,18 @@
 import leaderboard.aleo;
-program game_logic.aleo;
+program game_logic_v0001.aleo;
 
 
 struct Player:
     id as u64;
     attack as u64;
     defense as u64;
+
+record gameStruct:
+    owner as address.private;
+    opponent as address.private;
+    goals_1 as u64.private;
+    goals_2 as u64.private;
+    game_finished as boolean.private;
 
 record game_state:
     owner as address.public;
@@ -19,6 +26,11 @@ record game_state:
 
 function main:
     input r0 as boolean.private;
+
+
+function xabc:
+    input r0 as field.private;
+    output true as boolean.private;
 
 
 function create_game_private:
@@ -37,8 +49,10 @@ function create_game_open:
 function join_game:
     input r0 as game_state.record;
     input r1 as [Player; 11u32].private;
-    cast r0.owner self.caller r0.formation_1 r1 r0.goals_1 r0.goals_1 false into r2 as game_state.record;
-    output r2 as game_state.record;
+    not r0.game_finished into r2;
+    assert.eq r2 true;
+    cast r0.owner self.caller r0.formation_1 r1 r0.goals_1 r0.goals_1 false into r3 as game_state.record;
+    output r3 as game_state.record;
 
 
 function play_game:
@@ -109,5 +123,5 @@ function play_game:
     gt r0.formation_2[10u32].attack r0.formation_1[10u32].defense into r64;
     add r60 1u64 into r65;
     ternary r64 r65 r60 into r66;
-    cast r0.owner r0.opponent r0.formation_1 r0.formation_2 0u64 0u64 true into r67 as game_state.record;
+    cast r0.owner r0.opponent r0.formation_1 r0.formation_2 r63 r66 true into r67 as game_state.record;
     output r67 as game_state.record;
