@@ -12,9 +12,10 @@ import { csv } from "d3";
 import { useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { Toaster, toast } from "sonner";
 import "./CreateGame.css";
 
-function SelectFormation() {
+function SelectFormation({ setSelectedFormation }) {
   return (
     <Select>
       <SelectTrigger className="w-[180px] text-black">
@@ -23,9 +24,15 @@ function SelectFormation() {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Formations</SelectLabel>
-          <SelectItem value="0">4-3-3</SelectItem>
-          <SelectItem value="1">4-2-3-1</SelectItem>
-          <SelectItem value="2">3-5-2</SelectItem>
+          <SelectItem value="0" onClick={() => setSelectedFormation("4-3-3")}>
+            4-3-3
+          </SelectItem>
+          <SelectItem value="1" onClick={() => setSelectedFormation("4-2-3-1")}>
+            4-2-3-1
+          </SelectItem>
+          <SelectItem value="2" onClick={() => setSelectedFormation("3-5-2")}>
+            3-5-2
+          </SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
@@ -33,7 +40,7 @@ function SelectFormation() {
 }
 
 // Player.jsx
-const Player = ({ player, movePlayer, isActive }) => {
+const Player = ({ player, movePlayer, removePlayer, isActive }) => {
   const [, drag] = useDrag(() => ({
     type: "player",
     item: { id: player.id },
@@ -45,8 +52,14 @@ const Player = ({ player, movePlayer, isActive }) => {
     },
   }));
 
+  const handleDoubleClick = () => {
+    console.log("doulbe");
+    removePlayer(player.id);
+  };
+
   return (
     <Card
+      onDoubleClick={handleDoubleClick}
       className={`flex  bg-white ${
         isActive ? "w-2/3 h-28 p-2" : "w-full h-32 p-4"
       } shadow-lg  rounded-[2px]  transition duration-200 ease-in-out hover:scale-105 `}
@@ -85,7 +98,7 @@ const Player = ({ player, movePlayer, isActive }) => {
 };
 
 // GridSlot component
-const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
+const GridSlot = ({ slot, player, movePlayer, isDisabled, removePlayer }) => {
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: "player",
@@ -103,7 +116,12 @@ const GridSlot = ({ slot, player, movePlayer, isDisabled }) => {
   return (
     <div ref={drop} className={`grid-slot ${isDisabled ? "disabled" : ""}`}>
       {player && !isDisabled && (
-        <Player player={player} movePlayer={movePlayer} isActive={true} />
+        <Player
+          removePlayer={removePlayer}
+          player={player}
+          movePlayer={movePlayer}
+          isActive={true}
+        />
       )}
     </div>
   );
@@ -137,7 +155,6 @@ const SelectTeam = ({ onTeamSelected, setIsGameStarted }) => {
               onTeamSelected(team.name);
               setIsGameStarted(true);
             }}
-            q
           >
             <img
               src={`/images/${team.image}.png`}
@@ -154,20 +171,57 @@ const SelectTeam = ({ onTeamSelected, setIsGameStarted }) => {
   );
 };
 
-const fetchCSV = async () => {
-  console.log("fetching csv");
-  const response = await fetch("/players.csv");
-  const rawData = await response.text();
-  return csv(rawData);
-};
-
 // Strategy component
 const Strategy = ({ selectedTeam }) => {
   const [activePlayers, setActivePlayers] = useState([]);
   const [benchPlayers, setBenchPlayers] = useState([]);
   const [totalAttack, setTotalAttack] = useState(0);
   const [totalDefence, setTotalDefense] = useState(0);
+  const [selectedFormation, setSelectedFormation] = useState("4-3-3");
+
   const [grid, setGrid] = useState(Array.from({ length: 16 }, () => null)); // Assuming a 3x4 grid
+
+  // const removePlayer = (playerId) => {
+  //   setBenchPlayers((prevPlayers) =>
+  //     prevPlayers.filter((p) => p.id !== playerId)
+  //   );
+  //   setActivePlayers((prevPlayers) =>
+  //     prevPlayers.filter((p) => p?.id !== playerId)
+  //   );
+  //   setGrid((prevGrid) => prevGrid.map((p) => (p?.id === playerId ? null : p)));
+  // };
+
+  const removePlayer = (playerId) => {
+    setGrid((prevGrid) => {
+      const newGrid = [...prevGrid];
+      const playerIndexOnField = activePlayers.findIndex(
+        (p) => p?.id === playerId
+      );
+
+      // Check if the player is on the field
+      if (playerIndexOnField !== -1) {
+        // Remove the player from the field
+        setActivePlayers((prevPlayers) =>
+          prevPlayers.map((p, index) =>
+            index === playerIndexOnField ? null : p
+          )
+        );
+
+        // Check if the player is not already on the bench
+        const isPlayerOnBench = benchPlayers.some((p) => p.id === playerId);
+        if (!isPlayerOnBench) {
+          // Add the player back to the bench with sorted order
+          setBenchPlayers((prevPlayers) =>
+            [...prevPlayers, activePlayers[playerIndexOnField]].sort(
+              (a, b) => a.id - b.id
+            )
+          );
+        }
+      }
+
+      return newGrid;
+    });
+  };
 
   useEffect(() => {
     // Fetch and parse the CSV data on component mount
@@ -220,14 +274,16 @@ const Strategy = ({ selectedTeam }) => {
 
   const movePlayer = (playerId, slot) => {
     setGrid((prevGrid) => {
+      toast.warning("Be at the area 10 minutes before the event time");
       const newGrid = [...prevGrid];
       const playerIndexOnField = activePlayers.findIndex(
-        (p) => p.id === playerId
+        (p) => p?.id === playerId
       );
       const playerIndexOnBench = benchPlayers.findIndex(
         (p) => p.id === playerId
       );
 
+      // Check if the player is on the field
       if (playerIndexOnField !== -1) {
         const replacedPlayer = newGrid[slot];
 
@@ -253,7 +309,11 @@ const Strategy = ({ selectedTeam }) => {
         // Add the player to the field
         setActivePlayers((prevPlayers) => {
           const updatedPlayers = [...prevPlayers];
-          updatedPlayers[slot] = benchPlayers[playerIndexOnBench];
+          const formationColumns = selectedFormation.split("-").map(Number)[0];
+          const rowIndex = Math.floor(slot / formationColumns);
+          const colIndex = slot % formationColumns;
+          updatedPlayers[rowIndex * formationColumns + colIndex] =
+            benchPlayers[playerIndexOnBench];
           return updatedPlayers;
         });
 
@@ -290,11 +350,15 @@ const Strategy = ({ selectedTeam }) => {
     setTotalAttack(newTotalAttack);
     setTotalDefense(newTotalDefense);
   }, [activePlayers]);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex flex-row px-16 py-8 bg-white h-[90vh] w-full gap-4">
         <div className=" relative bg-field grid grid-cols-4  bg-cover object-contain bg-center max-h-[85vh]  bg-no-repeat w-full   ">
-          <SelectFormation />
+          <SelectFormation
+            selectedFormation={selectedFormation}
+            setSelectedFormation={setSelectedFormation}
+          />
 
           {/* <div className="grid-container "> */}
           {grid.map((player, index) => {
@@ -306,11 +370,12 @@ const Strategy = ({ selectedTeam }) => {
                 player={player}
                 movePlayer={movePlayer}
                 isDisabled={isDisabled}
+                removePlayer={removePlayer}
               />
             );
           })}
         </div>
-        <div className="flex flex-col w-1/3 h-auto bg-black px-4 rounded-md">
+        <div className="flex flex-col w-2/5 h-auto bg-black px-4 rounded-md">
           <div className="flex flex-col py-4 px-4 whitespace-nowrap">
             <h1 className="text-xl tracking-tighter">
               Current Attack : {totalAttack}
@@ -364,6 +429,7 @@ const CreateGame = () => {
           />
         </div>
       )}
+      <Toaster richColors />
     </div>
   );
 };
