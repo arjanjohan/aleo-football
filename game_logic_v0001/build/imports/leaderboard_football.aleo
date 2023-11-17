@@ -1,4 +1,4 @@
-program leaderboard.aleo;
+program leaderboard_football.aleo;
 
 struct User:
     win as u64;
