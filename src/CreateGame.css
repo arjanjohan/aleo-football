@@ -41,7 +41,6 @@
   align-items: center; /* Center vertically */
   width: 100%; /* Full width of the column */
   height: 120px; /* Adjust to your preference */
-  margin-bottom: 10px; /* Space between slots */
   position: relative;
 }
 

@@ -2,10 +2,11 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    // "./pages/**/*.{js,jsx}",
+    "./pages/**/*.{js,jsx}",
     "./src/components/**/*.{js,jsx,ts,tsx}",
-    // "./app/**/*.{js,jsx}",
+    "./app/**/*.{js,jsx}",
     "./src/*.{js,jsx}",
+    "./index.html",
   ],
   theme: {
     container: {
@@ -16,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        field: "url('/public/field_3.jpeg')",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
