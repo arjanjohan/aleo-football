@@ -57,7 +57,7 @@ The leaderboard leo contract is extended to include more fields. We log the resu
 The project needs to leverage the Puzzle SDK to prevent ghosting by players who think they will lose after the formations are revealed. By setting a timelock on the multisig, the player who ghosts will automatically forfeit the game if the timelock expires. This mechanic ensures all games will be played, since the outcome of forfeiting is always worse than playing the game. This is currently not implemented, but will be added as the next feature.
 
 ## Team
-This project was build at ZK Hack Istanbul 2023 by:
+This project was build at Aleo zkHackathon by:
 
 - [arjanjohan](https://x.com/arjanjohan/)
 - [Umut](http://x.com/nhestrompia)
