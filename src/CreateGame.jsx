@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Select,
@@ -8,12 +9,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { csv } from "d3";
 import { useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Toaster, toast } from "sonner";
 import "./CreateGame.css";
+import { useSupabase } from "./contexts/SupabaseContext";
 
 function SelectFormation({ setSelectedFormation }) {
   return (
@@ -44,6 +47,7 @@ const Player = ({ player, movePlayer, removePlayer, isActive }) => {
   const [, drag] = useDrag(() => ({
     type: "player",
     item: { id: player.id },
+    // canDrag: false,
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
       if (item && dropResult) {
@@ -61,14 +65,14 @@ const Player = ({ player, movePlayer, removePlayer, isActive }) => {
     <Card
       onDoubleClick={handleDoubleClick}
       className={`flex  bg-white ${
-        isActive ? "w-2/3 h-28 p-2" : "w-full h-32 p-4"
-      } shadow-lg  rounded-[2px]  transition duration-200 ease-in-out hover:scale-105 `}
+        isActive ? "w-2/3 h-28 p-2 opacity-80" : "w-full h-32 p-4 "
+      } shadow-lg    transition duration-200 ease-in-out hover:scale-105 `}
     >
       <div
         ref={drag}
         className={`flex relative  ${
           !isActive
-            ? " w-full h-full items-center justify-center"
+            ? " w-full h-full items-center justify-between"
             : "w-full h-full"
         } `}
       >
@@ -76,7 +80,7 @@ const Player = ({ player, movePlayer, removePlayer, isActive }) => {
           <img
             src={player.image}
             alt={player.name}
-            className={`${isActive ? "w-16 h-16  " : "w-14 h-14"} `}
+            className={`${isActive ? "w-16 h-16  " : "w-20 h-20"} `}
           />
         </div>
         <div
@@ -84,7 +88,7 @@ const Player = ({ player, movePlayer, removePlayer, isActive }) => {
             isActive ? "gap-1" : "gap-2"
           }`}
         >
-          <p className="font-bold whitespace-nowrap">{player.name}</p>
+          <p className="font-bold text-lg whitespace-nowrap">{player.name}</p>
           <p className="">
             <span className="font-bold">A:</span> {player.attackScore}
           </p>
@@ -130,11 +134,11 @@ const GridSlot = ({ slot, player, movePlayer, isDisabled, removePlayer }) => {
 const SelectTeam = ({ onTeamSelected, setIsGameStarted }) => {
   const teams = [
     {
-      name: "Fenerbahce",
+      name: "Fenerbahçe",
       image: "player_a",
     },
     {
-      name: "Besiktas",
+      name: "Beşiktaş",
       image: "player_b",
     },
     {
@@ -173,11 +177,18 @@ const SelectTeam = ({ onTeamSelected, setIsGameStarted }) => {
 
 // Strategy component
 const Strategy = ({ selectedTeam }) => {
+  const { supabase } = useSupabase();
   const [activePlayers, setActivePlayers] = useState([]);
   const [benchPlayers, setBenchPlayers] = useState([]);
+  const [currentPlayers, setCurrentPlayers] = useState([]);
   const [totalAttack, setTotalAttack] = useState(0);
-  const [totalDefence, setTotalDefense] = useState(0);
+  const [totalDefense, setTotalDefense] = useState(0);
+  const [opponentTotalDefense, setOpponentTotalDefense] = useState(0);
+  const [opponentTotalAttack, setOpponentTotalAttack] = useState(0);
   const [selectedFormation, setSelectedFormation] = useState("4-3-3");
+  const walletData = useWallet();
+  const [account, setAccount] = useState("");
+  console.log("🚀 ~ file: CreateGame.jsx:190 ~ Strategy ~ data:", walletData);
 
   const [grid, setGrid] = useState(Array.from({ length: 16 }, () => null)); // Assuming a 3x4 grid
 
@@ -237,13 +248,16 @@ const Strategy = ({ selectedTeam }) => {
           defenseScore: Number(player.defenseScore),
         }))
         .sort((a, b) => a.id - b.id);
-      console.log(
-        "🚀 ~ file: CreateGame.jsx:103 ~ csv ~ teamPlayers:",
-        teamPlayers
-      );
+
       setBenchPlayers(teamPlayers);
     });
   }, [selectedTeam]);
+
+  useEffect(() => {
+    if (walletData?.publicKey) {
+      setAccount(walletData.publicKey);
+    }
+  }, [walletData]);
 
   // const movePlayer = (playerId, slot) => {
   //   setGrid((prevGrid) => {
@@ -270,11 +284,52 @@ const Strategy = ({ selectedTeam }) => {
   //   });
   // };
 
+  const startGame = async () => {
+    try {
+      toast.info(
+        <div className="p-2 ">
+          <p className="text-lg tracking-tighter">Game Starting!</p>
+        </div>
+      );
+      console.log("supabase", supabase);
+      const { data, error } = await supabase.from("Games").insert({
+        id: 3,
+        // player_1: walletData?.publicKey,
+        // player_1:
+        // "aleo1aehm90wykztg28pda9wx6tz90gzrtgl3tyt2juf6ls7jndjnvvzqnjuhy4",
+        player2_total_attack: totalAttack,
+        player2_total_defense: totalDefense,
+        player_2_team: selectedTeam,
+        player_2:
+          "aleo12q3fkv28yxsaw8zry0lzqe28a7eqc3yn2mal8pz3xs04sjv43gysr2lwv8",
+      });
+      // .select();
+      console.log(
+        "🚀 ~ file: CreateGame.jsx:281 ~ startGame ~ error:",
+        data,
+        error
+      );
+      setTimeout(() => {
+        toast.success(
+          <div className="p-2 ">
+            <p className="text-lg tracking-tighter">You won the game 3-1</p>
+          </div>
+        );
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   //TODO add formation dropdown for team
 
   const movePlayer = (playerId, slot) => {
+    setCurrentPlayers((prevCurrentPlayers) => {
+      const newCurrentPlayers = [...prevCurrentPlayers, benchPlayers[playerId]];
+      return newCurrentPlayers;
+    });
+
     setGrid((prevGrid) => {
-      toast.warning("Be at the area 10 minutes before the event time");
       const newGrid = [...prevGrid];
       const playerIndexOnField = activePlayers.findIndex(
         (p) => p?.id === playerId
@@ -316,14 +371,6 @@ const Strategy = ({ selectedTeam }) => {
             benchPlayers[playerIndexOnBench];
           return updatedPlayers;
         });
-
-        // Add the replaced player back to the bench with sorted order
-        const replacedPlayer = newGrid[slot];
-        if (replacedPlayer) {
-          setBenchPlayers((prevPlayers) =>
-            [...prevPlayers, replacedPlayer].sort((a, b) => a.id - b.id)
-          );
-        }
       }
 
       // Update the newGrid with the correct player object
@@ -333,10 +380,13 @@ const Strategy = ({ selectedTeam }) => {
     });
   };
 
+  const activePlayersCount = activePlayers.filter(Boolean).length;
+
   //TODO make the players removable with double click
 
   useEffect(() => {
     // Calculate total attack and defense whenever activePlayers changes
+    console.log("346", activePlayers);
     const newTotalAttack = activePlayers.reduce(
       (sum, player) => (player ? sum + player.attackScore : sum),
       0
@@ -361,6 +411,7 @@ const Strategy = ({ selectedTeam }) => {
               setSelectedFormation={setSelectedFormation}
             />
           </div>
+
           {/* <div className="grid-container "> */}
           {grid.map((player, index) => {
             const isDisabled = index === 0 || index === 8; // Disables the top left and bottom left slots in a 3x4 grid
@@ -377,12 +428,23 @@ const Strategy = ({ selectedTeam }) => {
           })}
         </div>
         <div className="flex flex-col w-2/5 h-auto bg-black px-4 rounded-md">
+          {activePlayersCount === 11 && (
+            <div className="absolute right-24 top-36">
+              <Button
+                variant="outline"
+                className="text-black"
+                onClick={startGame}
+              >
+                Start Game
+              </Button>
+            </div>
+          )}
           <div className="flex flex-col py-4 px-4 whitespace-nowrap">
             <h1 className="text-xl tracking-tighter">
               Current Attack : {totalAttack}
             </h1>
             <h1 className="text-xl tracking-tighter">
-              Current Defence : {totalDefence}
+              Current Defence : {totalDefense}
             </h1>
           </div>
           <div className="w-full grid grid-cols-2 gap-2 overflow-y-auto h-[calc(100vh_-_40px)] p-5">
@@ -430,7 +492,7 @@ const CreateGame = () => {
           />
         </div>
       )}
-      <Toaster richColors />
+      <Toaster richColors position="bottom-center" />
     </div>
   );
 };

@@ -24,6 +24,7 @@ const Leaderboard = () => {
                 <TableHead className="">Team</TableHead>
                 <TableHead className="underline">GP</TableHead>
                 <TableHead className="underline">W</TableHead>
+                <TableHead className="underline">D</TableHead>
                 <TableHead className="underline">L</TableHead>
                 <TableHead className="underline">GF</TableHead>
                 <TableHead className="underline">GA</TableHead>
@@ -31,29 +32,6 @@ const Leaderboard = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="flex items-center">
-                  <img
-                    alt="Team A Icon"
-                    className="mr-2"
-                    height="20"
-                    src="/club_1.jpeg"
-                    style={{
-                      aspectRatio: "20/20",
-                      objectFit: "cover",
-                      borderRadius: 999,
-                    }}
-                    width="20"
-                  />
-                  <span className="font-medium">TMA</span>
-                </TableCell>
-                <TableCell>12</TableCell>
-                <TableCell>32</TableCell>
-                <TableCell>12</TableCell>
-                <TableCell>10</TableCell>
-                <TableCell>2</TableCell>
-                <TableCell>30</TableCell>
-              </TableRow>
               <TableRow>
                 <TableCell className="flex items-center">
                   <img
@@ -68,14 +46,15 @@ const Leaderboard = () => {
                     }}
                     width="20"
                   />
-                  <span className="font-medium">TMB</span>
+                  <span className="font-medium">aleo...wv8</span>
                 </TableCell>
-                <TableCell>12</TableCell>
-                <TableCell>28</TableCell>
-                <TableCell>14</TableCell>
-                <TableCell>9</TableCell>
+                <TableCell>1</TableCell>
+                <TableCell>1</TableCell>
+                <TableCell>0</TableCell>
+                <TableCell>0</TableCell>
                 <TableCell>3</TableCell>
-                <TableCell>27</TableCell>
+                <TableCell>1</TableCell>
+                <TableCell>3</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="flex items-center">
@@ -91,14 +70,15 @@ const Leaderboard = () => {
                     }}
                     width="20"
                   />
-                  <span className="font-medium">TMC</span>
+                  <span className="font-medium">aleo...hy4</span>
                 </TableCell>
-                <TableCell>12</TableCell>
-                <TableCell>27</TableCell>
-                <TableCell>15</TableCell>
-                <TableCell>8</TableCell>
-                <TableCell>4</TableCell>
-                <TableCell>24</TableCell>
+                <TableCell>1</TableCell>
+                <TableCell>0</TableCell>
+                <TableCell>0</TableCell>
+                <TableCell>1</TableCell>
+                <TableCell>1</TableCell>
+                <TableCell>3</TableCell>
+                <TableCell>0</TableCell>
               </TableRow>
             </TableBody>
           </Table>

@@ -2,59 +2,60 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./Games.css"; // CSS file for Games component
-import club1 from "/club_1.jpeg"; // Update the path to your logo image
-import club2 from "/club_2.jpeg"; // Update the path to your logo image
+
+const games = [
+  {
+    id: 1,
+    homeTeam: "Fenerbahçe",
+    homeLogo: "fenerbahce.png",
+    awayTeam: "Galatasaray",
+    awayLogo: "galatasaray.png",
+    score: "2-1",
+    state: "completed",
+  },
+  {
+    id: 2,
+    homeTeam: "Beşiktaş",
+    homeLogo: "besiktas-3.png",
+    awayTeam: "Galatasaray",
+    awayLogo: "galatasaray.png",
+    score: "2-1",
+    state: "completed",
+  },
+  {
+    id: 3,
+    homeTeam: "Galatasaray",
+    homeLogo: "galatasaray.png",
+    awayTeam: "Fenerbahçe",
+    awayLogo: "fenerbahce.png",
+    score: "0-2",
+    state: "completed",
+  },
+  {
+    id: 4,
+    homeTeam: "Fenerbahçe",
+    homeLogo: "fenerbahce.png",
+    awayTeam: "Beşiktaş",
+    awayLogo: "besiktas-3.png",
+    score: "3-1",
+    state: "completed",
+  },
+];
 
 const Games = () => {
   // You'll need to fetch or manage game data in state
   // This is just placeholder content
-  const games = [
-    {
-      id: 1,
-      homeTeam: "Lions",
-      homeLogo: "club_1.jpeg",
-      awayTeam: "Tigers",
-      awayLogo: "club_2.jpeg",
-      score: "2-1",
-      state: "completed",
-    },
-    {
-      id: 2,
-      homeTeam: "Pandas",
-      homeLogo: "club_1.jpeg",
-      awayTeam: "Bears",
-      awayLogo: "club_3.jpeg",
-      score: "8-0",
-      state: "completed",
-    },
-    {
-      id: 3,
-      homeTeam: "Dogs",
-      homeLogo: "club_2.jpeg",
-      awayTeam: "Cars",
-      awayLogo: "club_3.jpeg",
-      score: "5-0",
-      state: "completed",
-    },
-    {
-      id: 4,
-      homeTeam: "Dogs",
-      homeLogo: "club_2.jpeg",
-      awayTeam: "Cars",
-      awayLogo: "club_3.jpeg",
-      score: "5-0",
-      state: "completed",
-    },
-    // ... other games
-  ];
+  const navigate = useNavigate();
 
   return (
-    <section className="w-screen p-4 ">
-      <div className="flex w-full justify-center mt-2">
+    <section className="w-screen px-4 ">
+      <div className="flex w-full justify-center mt-3 ">
         <div className="flex w-full  max-w-sm items-center space-x-2">
           <Input type="text" className="text-black" placeholder="Room ID" />
-          <Button type="submit">Join Room</Button>
+          <Button onClick={() => navigate(`/game-room/3`)}>Join Room</Button>
         </div>
       </div>
       <div className="grid grid-cols-3 space-y-2 mx-auto mt-4 content-center items-center justify-center">
@@ -64,12 +65,12 @@ const Games = () => {
             className="  max-w-md shadow-lg rounded-xl overflow-hidden"
           >
             <div className="flex flex-col sm:flex-row justify-between p-6 space-y-6 sm:space-y-0">
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
                 <img
                   alt="Team A Logo"
                   className="rounded-full"
                   height="50"
-                  src={club1}
+                  src={game.homeLogo}
                   style={{
                     aspectRatio: "50/50",
                     objectFit: "cover",
@@ -87,13 +88,13 @@ const Games = () => {
                   {game.state === "completed" ? "Full Time" : "Ongoing"}
                 </p>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
                 <span className="font-bold text-lg">{game.awayTeam}</span>
                 <img
                   alt="Team B Logo"
                   className="rounded-full"
                   height="50"
-                  src={club2}
+                  src={game.awayLogo}
                   style={{
                     aspectRatio: "50/50",
                     objectFit: "cover",
@@ -120,7 +121,7 @@ const Games = () => {
               </p>
             </div> */}
             </div>
-            <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-700">
+            <div className="px-6 py-2 border-t border-gray-100 dark:border-gray-700">
               <Button className="w-full" variant="outline">
                 {game.state === "completed" ? "View Match Statistics" : "Play"}
               </Button>
