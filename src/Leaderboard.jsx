@@ -12,7 +12,7 @@ import {
 
 const Leaderboard = () => {
   return (
-    <section className="w-full text-black py-6 px-2 md:px-4 lg:px-8">
+    <section className="w-full  text-black py-6 px-2 md:px-4 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-semibold mb-2 tracking-tighter">
           Leo League Leaderboard

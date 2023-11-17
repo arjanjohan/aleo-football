@@ -29,7 +29,7 @@ const App = () => {
   );
   console.log("🚀 ~ file: App.jsx:30 ~ App ~ wallets:", wallets);
   return (
-    <main className="w-screen h-screen bg-white ">
+    <main className="w-screen h-screen bg-white lg:overflow-y-hidden">
       <WalletProvider
         wallets={wallets}
         decryptPermission={DecryptPermission.UponRequest}

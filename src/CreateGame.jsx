@@ -17,7 +17,7 @@ import "./CreateGame.css";
 
 function SelectFormation({ setSelectedFormation }) {
   return (
-    <Select>
+    <Select className="">
       <SelectTrigger className="w-[180px] text-black">
         <SelectValue className="" placeholder="Select a formation" />
       </SelectTrigger>
@@ -354,12 +354,13 @@ const Strategy = ({ selectedTeam }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex flex-row px-16 py-8 bg-white h-[90vh] w-full gap-4">
-        <div className=" relative bg-field grid grid-cols-4  bg-cover object-contain bg-center max-h-[85vh]  bg-no-repeat w-full   ">
-          <SelectFormation
-            selectedFormation={selectedFormation}
-            setSelectedFormation={setSelectedFormation}
-          />
-
+        <div className=" relative bg-field grid grid-cols-4  bg-cover  object-contain bg-center max-h-[85vh]  bg-no-repeat w-full   ">
+          <div className="relative left-4 top-4">
+            <SelectFormation
+              selectedFormation={selectedFormation}
+              setSelectedFormation={setSelectedFormation}
+            />
+          </div>
           {/* <div className="grid-container "> */}
           {grid.map((player, index) => {
             const isDisabled = index === 0 || index === 8; // Disables the top left and bottom left slots in a 3x4 grid

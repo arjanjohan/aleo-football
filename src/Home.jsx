@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "./Home.css"; // CSS file for Home component
-import logo from "/super-leo-lig-logo.png"; // Update the path to your logo image
+// import logo from "/super-leo-lig-logo.png"; // Update the path to your logo image
+import logo from "/logo_2.png"; // Update the path to your logo image
 
 const Home = ({}) => {
   return (
@@ -8,8 +9,8 @@ const Home = ({}) => {
       {/* <h1 className="text-5xl tracking-tighter">Welcome to Super Leo Lig</h1>
       <img src={logo} alt="Super Leo Lig Logo" className="home-logo" /> */}
 
-      <section className="relative flex items-center w-full h-full bg-white ">
-        <div className="relative items-center w-full px-5 py-12 mx-auto md:px-12 lg:px-16 max-w-7xl">
+      <section className="relative flex items-center w-full -mt-2 bg-white ">
+        <div className="relative items-center w-full px-5 py-12  mx-auto md:px-12 lg:px-16 max-w-7xl">
           <div className="relative flex-col items-start m-auto align-middle">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-24">
               <div className="relative items-center gap-12 m-auto lg:inline-flex md:order-first">

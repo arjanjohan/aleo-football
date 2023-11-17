@@ -76,7 +76,7 @@ const Games = () => {
                   }}
                   width="50"
                 />
-                <span className="font-bold text-lg">Team A</span>
+                <span className="font-bold text-lg">{game.homeTeam}</span>
               </div>
               <div className="text-center">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -88,7 +88,7 @@ const Games = () => {
                 </p>
               </div>
               <div className="flex items-center space-x-4">
-                <span className="font-bold text-lg">Team B</span>
+                <span className="font-bold text-lg">{game.awayTeam}</span>
                 <img
                   alt="Team B Logo"
                   className="rounded-full"
