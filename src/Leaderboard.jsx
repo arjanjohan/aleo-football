@@ -26,8 +26,8 @@ const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const calculateTotalGames = (win, draw, loss) => {
-    return leaderboard.win + leaderboard.loss + leaderboard.draw;
+  const calculateTotalPoints = (win, draw) => {
+    return win * 3 + draw;
   };
 
   useEffect(() => {
@@ -78,60 +78,31 @@ const Leaderboard = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="flex items-center">
-                  <img
-                    alt="Team B Icon"
-                    className="mr-2"
-                    height="20"
-                    src="/club_2.jpeg"
-                    style={{
-                      aspectRatio: "20/20",
-                      objectFit: "cover",
-                      borderRadius: 999,
-                    }}
-                    width="20"
-                  />
-                  <span className="font-medium">aleo...wv8</span>
-                </TableCell>
-
-                {/* <TableCell>1</TableCell>
-                <TableCell>1</TableCell>
-                <TableCell>0</TableCell>
-                <TableCell>0</TableCell>
-                <TableCell>3</TableCell>
-                <TableCell>1</TableCell>
-                <TableCell>3</TableCell> */}
-                {leaderboard && <TableCell>{calculateTotalGames()}</TableCell>}
-                {leaderboard &&
-                  Object.entries(leaderboard).map(([key, value]) => (
-                    <TableCell key={key}>{value}</TableCell>
+              {leaderboard &&
+                leaderboard.players
+                  .sort((a, b) => a.position - b.position)
+                  .map((player) => (
+                    <TableRow key={player.user}>
+                      <TableCell className="flex items-center">
+                        {/* You can customize the team icon and name display here */}
+                        <span className="font-medium">
+                          {truncateAddress(player.user)}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        {player.win + player.draw + player.loss}
+                      </TableCell>
+                      <TableCell>{player.win}</TableCell>
+                      <TableCell>{player.draw}</TableCell>
+                      <TableCell>{player.loss}</TableCell>
+                      <TableCell>{player.goals_scored}</TableCell>
+                      <TableCell>{player.goals_conceded}</TableCell>
+                      {/* You may want to calculate the points based on your scoring system */}
+                      <TableCell>
+                        {calculateTotalPoints(player.win, player.draw)}
+                      </TableCell>
+                    </TableRow>
                   ))}
-              </TableRow>
-              <TableRow>
-                <TableCell className="flex items-center">
-                  <img
-                    alt="Team C Icon"
-                    className="mr-2"
-                    height="20"
-                    src="/club_3.jpeg"
-                    style={{
-                      aspectRatio: "20/20",
-                      objectFit: "cover",
-                      borderRadius: 999,
-                    }}
-                    width="20"
-                  />
-                  <span className="font-medium">aleo...hy4</span>
-                </TableCell>
-                <TableCell>1</TableCell>
-                <TableCell>0</TableCell>
-                <TableCell>0</TableCell>
-                <TableCell>1</TableCell>
-                <TableCell>1</TableCell>
-                <TableCell>3</TableCell>
-                <TableCell>0</TableCell>
-              </TableRow>
             </TableBody>
           </Table>
         </div>

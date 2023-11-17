@@ -5,7 +5,6 @@ import {
   NetworkRecordProvider,
   ProgramManager,
 } from "@aleohq/sdk";
-import { getUsers } from "./db";
 // import { env } from "./utils";
 
 const keyProvider = new AleoKeyProvider();
@@ -29,7 +28,7 @@ const programManager = new ProgramManager(
 );
 programManager.setAccount(account);
 
-const parseUserStruct = (struct) => {
+const parseUserStruct = (struct, user) => {
   const lines = struct.split("\n");
 
   let goals_scored;
@@ -78,36 +77,40 @@ const parseUserStruct = (struct) => {
   if (!goals_conceded || !goals_scored)
     throw new Error("Failed parsing Aleo struct");
 
-  return { win, draw, loss, goals_scored, goals_conceded, position: 0 }; // position will be calculated later
+  return { win, draw, loss, goals_scored, goals_conceded, position: 0, user }; // position will be calculated later
 };
 
 const retrieveLeaderboard = async () => {
-  const users = getUsers();
+  // const users = getUsers();
+  const users = [
+    "aleo12q3fkv28yxsaw8zry0lzqe28a7eqc3yn2mal8pz3xs04sjv43gysr2lwv8",
+    "aleo1aehm90wykztg28pda9wx6tz90gzrtgl3tyt2juf6ls7jndjnvvzqnjuhy4",
+  ];
   console.log("🚀 ~ file: sdk.js:63 ~ retrieveLeaderboard ~ users:", users);
 
-  //   const promises = Object.entries(users).map(async ([username, id]) => {
-  const response = await networkClient.getProgramMappingValue(
-    "leaderboard_football.aleo",
-    "users",
-    `aleo12q3fkv28yxsaw8zry0lzqe28a7eqc3yn2mal8pz3xs04sjv43gysr2lwv8`
-  );
-  console.log("🚀 ~ file: sdk.js:71 ~ promises ~ response:", response);
-  if (response instanceof Error || !response || response === "null") {
-    throw response;
-  }
+  const promises = users.map(async (user, index) => {
+    const response = await networkClient.getProgramMappingValue(
+      "leaderboard_football.aleo",
+      "users",
+      user
+    );
+    console.log("🚀 ~ file: sdk.js:71 ~ promises ~ response:", response);
+    if (response instanceof Error || !response || response === "null") {
+      throw response;
+    }
 
-  const convertedData = {};
-  for (const key in response) {
-    console.log("ley", response);
-    const valueAsString = String(response[key]).replace(/u64$/, "");
-    convertedData[key] = parseInt(valueAsString);
-  }
+    // const convertedData = {};
+    // for (const key in response) {
+    //   console.log("ley", response);
+    //   const valueAsString = String(response[key]).replace(/u64$/, "");
+    //   convertedData[key] = parseInt(valueAsString);
+    // }
 
-  //   console.log("parse", parseUserStruct(response, username));
+    //   console.log("parse", parseUserStruct(response, username));
 
-  return parseUserStruct(response);
-  //   });
-  console.log("🚀 ~ file: sdk.js:76 ~ promises ~ promises:", convertedData);
+    return parseUserStruct(response, user);
+  });
+  // console.log("🚀 ~ file: sdk.js:76 ~ promises ~ promises:", convertedData);
 
   const players = await Promise.all(promises);
 
