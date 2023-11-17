@@ -63,13 +63,13 @@ const parseUserStruct = (struct, user) => {
 
     if (trimmed.startsWith("draw")) {
       const value = parseU64(trimmed);
-      loss = parseInt(value);
+      draw = parseInt(value);
       return;
     }
 
     if (trimmed.startsWith("loss")) {
       const value = parseU64(trimmed);
-      draw = parseInt(value);
+      loss = parseInt(value);
       return;
     }
   });
