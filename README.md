@@ -1,6 +1,7 @@
 # Super Leo Lig
-
+<p align="center">
 <img src="https://github.com/arjanjohan/aleo-football/blob/cc1f8b8f7e0dfc350ab39ee87ffa07d1dcfa14e0/public/logo_2.png" alt="logo" width="500"/>
+</p>
 
 ⚽ Super Leo Lig is an on-chain football manager game that leverages the privacy that Aleo provides to hide players' strategies from opponents.
 
@@ -45,6 +46,7 @@ snarkos developer deploy game_logic_v0001.aleo --private-key "APrivateKeyxxx" --
 
 ## Links
 - [Devpost](https://devpost.com/software/super-leo-lig)
+- [Presentation/demo video](https://www.youtube.com/watch?v=tXC3JeZ8lXo)
 - [Presentation slides](https://docs.google.com/presentation/d/1wmOayL9An8hf2roC52FTexAK3fVqePfloG6mtR5j3TE/edit?usp=sharing)
 - [Deployed game contract](https://aleo123.io/programDetail/game_logic_v0001.aleo)
 - [Deployed leaderboard contract](https://aleo123.io/programDetail/leaderboard_football.aleo)
