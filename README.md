@@ -46,14 +46,8 @@ snarkos developer deploy game_logic_v0001.aleo --private-key "APrivateKeyxxx" --
 ## Links
 - [Devpost](https://devpost.com/software/super-leo-lig)
 - [Presentation slides](https://docs.google.com/presentation/d/1wmOayL9An8hf2roC52FTexAK3fVqePfloG6mtR5j3TE/edit?usp=sharing)
+- [Deployed game contract](https://aleo123.io/programDetail/game_logic_v0001.aleo)
 - [Deployed leaderboard contract](https://aleo123.io/programDetail/leaderboard_football.aleo)
-
-We had some issues with deploying our contracts. We only managed to deployed the game_logic contract locally.
-```
-✅ Created deployment transaction for 'game_logic_v0001.aleo'
-✅ Successfully broadcast deployment at1w55h77spyvr06gqa0xzzgulgvtjgnx8wjh6dns92pfre7yvqa5gqz9fd7g ('game_logic_v0001.aleo') to http://localhost:3030/testnet3/transaction/broadcast.
-at1w55h77spyvr06gqa0xzzgulgvtjgnx8wjh6dns92pfre7yvqa5gqz9fd7g
-```
 
 ## Hackathon bounties
 #### ​Kryha - Best zkLeaderboard 
