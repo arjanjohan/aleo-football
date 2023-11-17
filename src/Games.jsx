@@ -58,7 +58,7 @@ const Games = () => {
           <Button onClick={() => navigate(`/game-room/3`)}>Join Room</Button>
         </div>
       </div>
-      <div className="grid grid-cols-3 space-y-2 mx-auto mt-4 content-center items-center justify-center">
+      <div className="grid grid-cols-3 gap-6  mt-4  mx-8">
         {games.map((game) => (
           <Card
             key={game.id}
@@ -80,7 +80,7 @@ const Games = () => {
                 <span className="font-bold text-lg">{game.homeTeam}</span>
               </div>
               <div className="text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
                   Premier League
                 </p>
                 <p className="text-xl font-bold">{game.score}</p>
