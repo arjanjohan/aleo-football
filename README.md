@@ -8,7 +8,7 @@
 
 - 🧾 **Privacy on Aleo**: Players commit to a strategy privately using Aleo.
 - ⛓️ **Smart contracts**: Verifies strategies and results of the game.
-- 🧩 **Multisig solution**: This will secure the wagered amounts and prevents ghosting by losing players.
+- 🧩 **Multisig solution**: The Puzzle multisig secures the wagered amounts and prevents ghosting by losing players.
 - 📑 **Leaderboard**: The Obscura leaderboard is updated live after each game played.
 - 🖼️ **Frontend**: Results are generated in the browser based on strategies.
 
