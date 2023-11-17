@@ -412,7 +412,7 @@ const Strategy = ({ selectedTeam }) => {
             />
           </div>
 
-          {/* <div className="grid-container "> */}
+          {/* <div className="mt-4 "> */}
           {grid.map((player, index) => {
             const isDisabled = index === 0 || index === 8; // Disables the top left and bottom left slots in a 3x4 grid
             return (
@@ -426,6 +426,7 @@ const Strategy = ({ selectedTeam }) => {
               />
             );
           })}
+          {/* </div> */}
         </div>
         <div className="flex flex-col w-2/5 h-auto bg-black px-4 rounded-md">
           {activePlayersCount === 11 && (
