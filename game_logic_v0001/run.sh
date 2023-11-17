@@ -50,6 +50,7 @@ leo run create_game_open '[{id: 0u64, attack: 10u64, defense: 0u64},{id: 0u64, a
 "
 
 full_output=$(leo run create_game_private '[{id: 0u64, attack: 10u64, defense: 0u64},{id: 0u64, attack: 50u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64}]' 'aleo1wyvu96dvv0auq9e4qme54kjuhzglyfcf576h0g3nrrmrmr0505pqd6wnry')
+echo "$full_output"
 output_section=$(echo "$full_output" | sed -n '/➡️  Output/,/Leo ✅ Finished/p')
 bracket_content=$(echo "$output_section" | sed '/➡️  Output/d' | sed '/Leo ✅ Finished/d' | tr -d '•' | tr -d '\n' | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
 
@@ -67,6 +68,7 @@ Player 2 joins a game and selects his formation
 
 join_game_command="leo run join_game \"$bracket_content\" \"[{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 50u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 100u64, defense: 100u64},{id: 0u64, attack: 30u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 30u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 30u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64}]\""
 full_output=$(eval $join_game_command)
+echo "$full_output"
 output_section=$(echo "$full_output" | sed -n '/➡️  Output/,/Leo ✅ Finished/p')
 bracket_content=$(echo "$output_section" | sed '/➡️  Output/d' | sed '/Leo ✅ Finished/d' | tr -d '•' | tr -d '\n' | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
 
