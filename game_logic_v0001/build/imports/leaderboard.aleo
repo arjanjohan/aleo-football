@@ -16,7 +16,6 @@ function update_score:
     input r0 as address.private;
     input r1 as u64.private;
     input r2 as u64.private;
-    assert.eq self.caller self.signer;
     async update_score r0 r1 r2 into r3;
     output r3 as leaderboard.aleo/update_score.future;
 

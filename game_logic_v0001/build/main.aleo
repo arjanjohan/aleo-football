@@ -51,7 +51,7 @@ function join_game:
     input r1 as [Player; 11u32].private;
     not r0.game_finished into r2;
     assert.eq r2 true;
-    cast r0.owner self.caller r0.formation_1 r1 r0.goals_1 r0.goals_1 false into r3 as game_state.record;
+    cast r0.owner r0.opponent r0.formation_1 r1 r0.goals_1 r0.goals_1 false into r3 as game_state.record;
     output r3 as game_state.record;
 
 

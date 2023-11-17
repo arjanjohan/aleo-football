@@ -49,13 +49,9 @@ Player 1 creates a game with his team and formation. Player 2 now is allowed to 
 leo run create_game_open '[{id: 0u64, attack: 10u64, defense: 0u64},{id: 0u64, attack: 50u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64}]'
 "
 
-full_output=$(leo run create_game_open '[{id: 0u64, attack: 10u64, defense: 0u64},{id: 0u64, attack: 50u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64}]')
-echo "$full_output"
+full_output=$(leo run create_game_private '[{id: 0u64, attack: 10u64, defense: 0u64},{id: 0u64, attack: 50u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64}]' 'aleo1wyvu96dvv0auq9e4qme54kjuhzglyfcf576h0g3nrrmrmr0505pqd6wnry')
 output_section=$(echo "$full_output" | sed -n '/➡️  Output/,/Leo ✅ Finished/p')
-echo "$output_section"
-echo "AVH"
 bracket_content=$(echo "$output_section" | sed '/➡️  Output/d' | sed '/Leo ✅ Finished/d' | tr -d '•' | tr -d '\n' | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
-echo "$bracket_content"
 
 
 
@@ -68,7 +64,27 @@ echo "
 
 Player 2 joins a game and selects his formation
 "
+
 join_game_command="leo run join_game \"$bracket_content\" \"[{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 50u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 100u64, defense: 100u64},{id: 0u64, attack: 30u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 30u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 30u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64}]\""
-echo "$join_game_command"
-full_output=$(leo run join_game "$bracket_content" "[{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 50u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 100u64, defense: 100u64},{id: 0u64, attack: 30u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 30u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64},{id: 0u64, attack: 30u64, defense: 0u64},{id: 0u64, attack: 0u64, defense: 0u64}]")
-eval $join_game_command
+full_output=$(eval $join_game_command)
+output_section=$(echo "$full_output" | sed -n '/➡️  Output/,/Leo ✅ Finished/p')
+bracket_content=$(echo "$output_section" | sed '/➡️  Output/d' | sed '/Leo ✅ Finished/d' | tr -d '•' | tr -d '\n' | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
+
+
+
+echo "
+###############################################################################
+########                                                               ########
+########         STEP 3: Player 1 executes the game                    ########
+########                                                               ########
+###############################################################################
+
+Player 1 generates the game outcome by executing the play_game logic.
+"
+play_game_command="leo run play_game \"$bracket_content\" "
+full_output=$(eval $play_game_command)
+echo "$full_output"
+output_section=$(echo "$full_output" | sed -n '/➡️  Output/,/Leo ✅ Finished/p')
+bracket_content=$(echo "$output_section" | sed '/➡️  Output/d' | sed '/Leo ✅ Finished/d' | tr -d '•' | tr -d '\n' | sed 's/  */ /g' | sed 's/^ *//;s/ *$//')
+
+

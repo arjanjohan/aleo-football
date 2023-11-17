@@ -67,7 +67,7 @@ program game_logic_v0001.aleo {
         
         return game_state {
             owner: game.owner,
-            opponent: self.caller,
+            opponent: game.opponent,
             formation_1: game.formation_1,
             formation_2: formation,
             goals_1: game.goals_1,

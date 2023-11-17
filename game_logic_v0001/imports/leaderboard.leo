@@ -10,7 +10,7 @@ program leaderboard.aleo {
     mapping users: address => User;
 
     transition update_score(user_id: address, goals_scored: u64, goals_conceded: u64) {
-        assert_eq(self.caller, self.signer);
+        // assert_eq(self.caller, self.signer);
         return then finalize(user_id, goals_scored, goals_conceded);
     }
 
