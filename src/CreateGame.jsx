@@ -9,14 +9,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Transaction,
+  WalletAdapterNetwork,
+  WalletNotConnectedError,
+} from "@demox-labs/aleo-wallet-adapter-base";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { csv } from "d3";
 import { useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { useLocation } from "react-router-dom";
 import { Toaster, toast } from "sonner";
 import "./CreateGame.css";
-import { useSupabase } from "./contexts/SupabaseContext";
+
+const LEADERBOARD_CONTRACT = "leaderboard_football.aleo";
+const GAME_CONTRACT = "game_logic_v0001.aleo";
 
 function SelectFormation({ setSelectedFormation }) {
   return (
@@ -177,6 +185,7 @@ const SelectTeam = ({ onTeamSelected, setIsGameStarted }) => {
 
 // Strategy component
 const Strategy = ({ selectedTeam }) => {
+  const location = useLocation();
   const { supabase } = useSupabase();
   const [activePlayers, setActivePlayers] = useState([]);
   const [benchPlayers, setBenchPlayers] = useState([]);
@@ -186,9 +195,8 @@ const Strategy = ({ selectedTeam }) => {
   const [opponentTotalDefense, setOpponentTotalDefense] = useState(0);
   const [opponentTotalAttack, setOpponentTotalAttack] = useState(0);
   const [selectedFormation, setSelectedFormation] = useState("4-3-3");
-  const walletData = useWallet();
+  const { publicKey, requestTransaction } = useWallet();
   const [account, setAccount] = useState("");
-  console.log("🚀 ~ file: CreateGame.jsx:190 ~ Strategy ~ data:", walletData);
 
   const [grid, setGrid] = useState(Array.from({ length: 16 }, () => null)); // Assuming a 3x4 grid
 
@@ -254,10 +262,10 @@ const Strategy = ({ selectedTeam }) => {
   }, [selectedTeam]);
 
   useEffect(() => {
-    if (walletData?.publicKey) {
-      setAccount(walletData.publicKey);
+    if (publicKey) {
+      setAccount(publicKey);
     }
-  }, [walletData]);
+  }, []);
 
   // const movePlayer = (playerId, slot) => {
   //   setGrid((prevGrid) => {
@@ -291,34 +299,60 @@ const Strategy = ({ selectedTeam }) => {
           <p className="text-lg tracking-tighter">Game Starting!</p>
         </div>
       );
-      console.log("supabase", supabase);
-      const { data, error } = await supabase.from("Games").insert({
-        id: 3,
-        // player_1: walletData?.publicKey,
-        // player_1:
-        // "aleo1aehm90wykztg28pda9wx6tz90gzrtgl3tyt2juf6ls7jndjnvvzqnjuhy4",
-        player2_total_attack: totalAttack,
-        player2_total_defense: totalDefense,
-        player_2_team: selectedTeam,
-        player_2:
-          "aleo12q3fkv28yxsaw8zry0lzqe28a7eqc3yn2mal8pz3xs04sjv43gysr2lwv8",
-      });
-      // .select();
-      console.log(
-        "🚀 ~ file: CreateGame.jsx:281 ~ startGame ~ error:",
-        data,
-        error
+
+      const record = `'{"id":"0f27d86a-1026-4980-9816-bcdce7569aa4","program_id":"game_logic_v0001.aleo","microcredits":"200000","spent":false,"data":{}}'`;
+      // Note that the inputs must be formatted in the same order as the Aleo program function expects, otherwise it will fail
+      const inputs = [JSON.parse(activePlayers), publicKey];
+      const fee = 35_000; // This will fail if fee is not set high enough
+
+      const aleoTransaction = Transaction.createTransaction(
+        publicKey,
+        WalletAdapterNetwork.Testnet,
+        "game_logic_v0001.aleo",
+        "transfer",
+        inputs,
+        fee
       );
-      setTimeout(() => {
-        toast.success(
-          <div className="p-2 ">
-            <p className="text-lg tracking-tighter">You won the game 3-1</p>
-          </div>
-        );
-      }, 2000);
+
+      if (requestTransaction) {
+        // Returns a transaction Id, that can be used to check the status. Note this is not the on-chain transaction id
+        await requestTransaction(aleoTransaction);
+      }
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const joinGame = async () => {
+    try {
+      if (!publicKey) throw new WalletNotConnectedError();
+
+      toast.info(
+        <div className="p-2 ">
+          <p className="text-lg tracking-tighter">Game Starting!</p>
+        </div>
+      );
+
+      // The record here is an output from the Requesting Records above
+      const record = `'{"id":"0f27d86a-1026-4980-9816-bcdce7569aa4","program_id":"game_logic_v0001.aleo","microcredits":"200000","spent":false,"data":{}}'`;
+      // Note that the inputs must be formatted in the same order as the Aleo program function expects, otherwise it will fail
+      const inputs = [JSON.parse(activePlayers), publicKey];
+      const fee = 35_000; // This will fail if fee is not set high enough
+
+      const aleoTransaction = Transaction.createTransaction(
+        publicKey,
+        WalletAdapterNetwork.Testnet,
+        "game_logic_v0001.aleo",
+        "transfer",
+        inputs,
+        fee
+      );
+
+      if (requestTransaction) {
+        // Returns a transaction Id, that can be used to check the status. Note this is not the on-chain transaction id
+        await requestTransaction(aleoTransaction);
+      }
+    } catch (error) {}
   };
 
   //TODO add formation dropdown for team
@@ -434,7 +468,9 @@ const Strategy = ({ selectedTeam }) => {
               <Button
                 variant="outline"
                 className="text-black"
-                onClick={startGame}
+                onClick={
+                  location.pathname === "create-game" ? startGame : joinGame
+                }
               >
                 Start Game
               </Button>

@@ -1,5 +1,8 @@
 // Leaderboard.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getLeaderboard, storeLeaderboard } from "./db";
+import { sdk } from "./sdk";
+
 // import './Leaderboard.css'; // Assuming you have a separate CSS file for the Leaderboard
 import {
   Table,
@@ -11,6 +14,32 @@ import {
 } from "@/components/ui/table";
 
 const Leaderboard = () => {
+  const [leaderboard, setLeaderboard] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const lb = getLeaderboard();
+    console.log("🚀 ~ file: Leaderboard.jsx:19 ~ useEffect ~ lb:", lb);
+    setLeaderboard(lb);
+    refreshLeaderboard();
+  }, []);
+
+  const refreshLeaderboard = async () => {
+    setIsLoading(true);
+    try {
+      const lb = await sdk.retrieveLeaderboard();
+      console.log(
+        "🚀 ~ file: Leaderboard.jsx:31 ~ refreshLeaderboard ~ lb:",
+        lb
+      );
+      storeLeaderboard(lb);
+      setLeaderboard(lb);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <section className="w-full  text-black py-6 px-2 md:px-4 lg:px-8">
       <div className="max-w-7xl mx-auto">
