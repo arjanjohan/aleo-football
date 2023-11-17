@@ -12,12 +12,26 @@
 - 📑 **Leaderboard**: The Obscura leaderboard is updated live after each game played.
 - 🖼️ **Frontend**: Results are generated in the browser based on strategies.
 
+
+
 ## Contents
 - [Contents](#contents)
 - [Diagram](#diagram)
 - [Links](#links)
 - [Hackathon bounties](#hackathon-bounties)
 - [Team](#team)
+
+## Run and test
+The frontend dapp can be deployed by running 
+```
+npm run dev
+```
+
+To test the smart contracts locally run the test suite from smart contracts directory.
+```
+cd game_logic_v0001
+bash run.sh
+```
 
 ## Diagram
 ![diagram](https://github.com/arjanjohan/aleo-football/blob/d02fd71a8c20f54cd3cde26cc232b5123f0bcdbe/public/flow.png)
