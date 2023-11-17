@@ -9,14 +9,14 @@ const Home = ({}) => {
       {/* <h1 className="text-5xl tracking-tighter">Welcome to Super Leo Lig</h1>
       <img src={logo} alt="Super Leo Lig Logo" className="home-logo" /> */}
 
-      <section className="relative flex items-center w-full -mt-2 bg-white ">
+      <section className="relative flex items-center w-full  bg-white ">
         <div className="relative items-center w-full px-5 py-12  mx-auto md:px-12 lg:px-16 max-w-7xl">
           <div className="relative flex-col items-start m-auto align-middle">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-24">
               <div className="relative items-center gap-12 m-auto lg:inline-flex md:order-first">
                 <div className="max-w-xl text-center lg:text-left">
                   <div>
-                    <p className="text-2xl font-medium tracking-tight text-black sm:text-4xl">
+                    <p className="text-2xl font-medium tracking-tighter text-black sm:text-4xl">
                       Welcome to Super Leo Lig!{" "}
                     </p>
                     <p className="max-w-xl mt-4 text-base tracking-tight text-gray-600">

@@ -15,6 +15,7 @@ import { WalletProvider } from "@demox-labs/aleo-wallet-adapter-react";
 import { WalletModalProvider } from "@demox-labs/aleo-wallet-adapter-reactui";
 import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 import React, { useMemo } from "react";
+import { SupabaseProvider } from "./contexts/SupabaseContext";
 
 // require("@demox-labs/aleo-wallet-adapter-reactui/styles.css");
 
@@ -27,32 +28,36 @@ const App = () => {
     ],
     []
   );
-  console.log("🚀 ~ file: App.jsx:30 ~ App ~ wallets:", wallets);
+  console.log("🚀 ~ file: App.jsx:31 ~ App ~ wallets:", wallets);
+
   return (
     <main className="w-screen h-screen bg-white lg:overflow-y-hidden">
-      <WalletProvider
-        wallets={wallets}
-        decryptPermission={DecryptPermission.UponRequest}
-        network={WalletAdapterNetwork.Localnet}
-        autoConnect
-      >
-        <WalletModalProvider>
-          <Router>
-            <div>
-              <Navbar />
-            </div>
-            <div>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/create-game" element={<CreateGame />} />
-                <Route path="/games" element={<Games />} />
-                <Route path="/leaderboard" element={<Leaderboard />} />
-                {/* Add other routes as needed */}
-              </Routes>
-            </div>
-          </Router>
-        </WalletModalProvider>
-      </WalletProvider>
+      <SupabaseProvider>
+        <WalletProvider
+          wallets={wallets}
+          decryptPermission={DecryptPermission.UponRequest}
+          network={WalletAdapterNetwork.Localnet}
+          autoConnect
+        >
+          <WalletModalProvider>
+            <Router>
+              <div>
+                <Navbar />
+              </div>
+              <div>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/create-game" element={<CreateGame />} />
+                  <Route path="/games" element={<Games />} />
+                  <Route path="/leaderboard" element={<Leaderboard />} />
+                  <Route path="/game-room/:id" element={<CreateGame />} />
+                  {/* Add other routes as needed */}
+                </Routes>
+              </div>
+            </Router>
+          </WalletModalProvider>
+        </WalletProvider>
+      </SupabaseProvider>
     </main>
   );
 };

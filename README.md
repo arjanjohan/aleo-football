@@ -34,14 +34,26 @@ cd game_logic_v0001
 bash run.sh
 ```
 
+To deploy the smart contracts to a local node please run this
+
+```
+snarkos developer deploy game_logic_v0001.aleo --private-key "APrivateKeyxxx" --query "http://localhost:3030" --broadcast "http://localhost:3030/testnet3/transaction/broadcast" --priority-fee 1000000
+```
+
 ## Diagram
 ![diagram](https://github.com/arjanjohan/aleo-football/blob/d02fd71a8c20f54cd3cde26cc232b5123f0bcdbe/public/flow.png)
 
 ## Links
-- [Deployed game]()
 - [Devpost](https://devpost.com/software/super-leo-lig)
 - [Presentation slides](https://docs.google.com/presentation/d/1wmOayL9An8hf2roC52FTexAK3fVqePfloG6mtR5j3TE/edit?usp=sharing)
-- [Deployed contract]()
+- [Deployed leaderboard contract](https://aleo123.io/programDetail/leaderboard_football.aleo)
+
+We had some issues with deploying our contracts. We only managed to deployed the game_logic contract locally.
+```
+✅ Created deployment transaction for 'game_logic_v0001.aleo'
+✅ Successfully broadcast deployment at1w55h77spyvr06gqa0xzzgulgvtjgnx8wjh6dns92pfre7yvqa5gqz9fd7g ('game_logic_v0001.aleo') to http://localhost:3030/testnet3/transaction/broadcast.
+at1w55h77spyvr06gqa0xzzgulgvtjgnx8wjh6dns92pfre7yvqa5gqz9fd7g
+```
 
 ## Hackathon bounties
 #### ​Kryha - Best zkLeaderboard 
