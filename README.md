@@ -17,6 +17,7 @@
 ## Contents
 - [Contents](#contents)
 - [Diagram](#diagram)
+- [Run and test](#run-and-test)
 - [Links](#links)
 - [Hackathon bounties](#hackathon-bounties)
 - [Team](#team)
