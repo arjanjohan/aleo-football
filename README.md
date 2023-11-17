@@ -6,8 +6,9 @@
 
 ⚙️ Built using Leo, Obscura SDK, Puzzle SDK, React and Javascript.
 
-- 🧾 **ZK proofs**: Players compute proof that they use a valid strategy and commit to their strategy privately.
-- ⛓️ **Smart contracts**: Verifies strategies and winner. After this tokens can be distributed to winners.
+- 🧾 **Privacy on Aleo**: Players commit to a strategy privately using Aleo.
+- ⛓️ **Smart contracts**: Verifies strategies and results of the game.
+- 🧩 **Multisig solution**: This will secure the wagered amounts and prevents ghosting by losing players.
 - 📑 **Leaderboard**: The Obscura leaderboard is updated live after each game played.
 - 🖼️ **Frontend**: Results are generated in the browser based on strategies.
 
